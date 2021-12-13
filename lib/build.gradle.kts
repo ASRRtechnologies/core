@@ -102,6 +102,9 @@ dependencies {
 
     testImplementation("org.springframework.security:spring-security-test")
 
+    // User mockK
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
+
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
