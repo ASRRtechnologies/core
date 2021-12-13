@@ -100,8 +100,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:2.6.1")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 
-    // Spring Security for authentication
-    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // Json web tokens for authentication
     implementation("io.jsonwebtoken:jjwt:0.9.1")
