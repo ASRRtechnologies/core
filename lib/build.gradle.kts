@@ -1,6 +1,9 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
+    kotlin("plugin.spring") version "1.4.21-2"
+    id("org.springframework.boot") version "2.4.4"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -8,7 +11,8 @@ plugins {
     signing
 }
 
-
+group = "nl.asrr"
+version = "0.1.3"
 
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -16,7 +20,6 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
-
 
 publishing {
     repositories {
@@ -55,14 +58,12 @@ publishing {
                 }
             }
 
-
             artifactId = "common"
 
             from(components["java"])
         }
     }
 }
-
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -83,6 +84,27 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation("com.google.guava:guava:30.0-jre")
 
+    // Spring Boot
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
+
+    // Spring Security for authentication
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
+    // Json web tokens for authentication
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+
+    // Lombok
+    implementation("org.projectlombok:lombok:1.18.22")
+
+    // Kotlin Logger
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+
+    // User mockK
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
+
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
@@ -99,5 +121,3 @@ tasks.jar {
             "Implementation-Version" to project.version))
     }
 }
-
-
