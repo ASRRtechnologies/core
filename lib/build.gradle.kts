@@ -36,7 +36,7 @@ publishing {
         }
     }
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("gpr") {
             pom {
                 name.set("ASRR Common Kotlin Libary")
                 description.set("A library for all common ASRR code")
