@@ -84,23 +84,23 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation("com.google.guava:guava:30.0-jre")
 
+    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 
     // Spring Security for authentication
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // Used for json webtokens for authentication
+    // Json web tokens for authentication
     implementation("io.jsonwebtoken:jjwt:0.9.1")
 
+    // Lombok
     implementation("org.projectlombok:lombok:1.18.22")
 
+    // Kotlin Logger
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
-
-    testImplementation("org.springframework.security:spring-security-test")
 
     // User mockK
     testImplementation("com.ninja-squad:springmockk:3.0.1")
