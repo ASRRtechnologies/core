@@ -6,8 +6,8 @@ import nl.asrr.common.auth.exception.UnexpectedUserException
 import nl.asrr.common.auth.jwt.JwtTokenUtil
 import nl.asrr.common.auth.model.BasicUser
 import nl.asrr.common.auth.model.RefreshToken
-import nl.asrr.common.auth.respository.IGenericUserRepository
-import nl.asrr.common.auth.respository.IRefreshTokenRepository
+import nl.asrr.common.auth.repository.IGenericUserRepository
+import nl.asrr.common.auth.repository.IRefreshTokenRepository
 import nl.asrr.common.exceptions.NotFoundException
 import nl.asrr.common.id.IdGenerator
 import org.springframework.beans.factory.annotation.Value

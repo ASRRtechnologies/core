@@ -1,7 +1,7 @@
 package nl.asrr.common.auth.jwt
 
 import nl.asrr.common.auth.model.BasicUser
-import nl.asrr.common.auth.respository.IGenericUserRepository
+import nl.asrr.common.auth.repository.IGenericUserRepository
 import nl.asrr.common.exceptions.NotFoundException
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

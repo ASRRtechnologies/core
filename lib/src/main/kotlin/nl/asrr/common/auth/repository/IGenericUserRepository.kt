@@ -1,4 +1,4 @@
-package nl.asrr.common.auth.respository
+package nl.asrr.common.auth.repository
 
 import nl.asrr.common.auth.model.BasicUser
 import org.springframework.data.mongodb.repository.MongoRepository

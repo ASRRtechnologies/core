@@ -2,7 +2,7 @@ package nl.asrr.common.auth.config
 
 import nl.asrr.common.auth.jwt.GenericJwtTokenFilter
 import nl.asrr.common.auth.model.BasicUser
-import nl.asrr.common.auth.respository.IGenericUserRepository
+import nl.asrr.common.auth.repository.IGenericUserRepository
 import nl.asrr.common.exceptions.NotFoundException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

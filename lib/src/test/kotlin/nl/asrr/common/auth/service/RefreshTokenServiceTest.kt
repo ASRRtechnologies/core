@@ -5,8 +5,8 @@ import io.mockk.mockk
 import nl.asrr.common.auth.exception.ExpiredRefreshTokenException
 import nl.asrr.common.auth.jwt.JwtTokenUtil
 import nl.asrr.common.auth.model.RefreshToken
-import nl.asrr.common.auth.respository.IBasicUserRepository
-import nl.asrr.common.auth.respository.IRefreshTokenRepository
+import nl.asrr.common.auth.repository.IBasicUserRepository
+import nl.asrr.common.auth.repository.IRefreshTokenRepository
 import nl.asrr.common.auth.util.AuthUtil
 import nl.asrr.common.exceptions.NotFoundException
 import nl.asrr.common.id.IdGenerator
