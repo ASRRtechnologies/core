@@ -3,12 +3,14 @@
  */
 package nl.asrr.common
 
-import kotlin.test.Test
-import kotlin.test.assertTrue
+import org.junit.Test
+import org.junit.jupiter.api.Assertions
 
 class LibraryTest {
-    @Test fun testSomeLibraryMethod() {
+
+    @Test
+    fun testSomeLibraryMethod() {
         val classUnderTest = Library()
-        assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'")
+        Assertions.assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'")
     }
 }

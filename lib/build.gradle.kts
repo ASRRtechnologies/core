@@ -57,6 +57,11 @@ publishing {
                         name.set("Amar Ramdas")
                         email.set("amar.ramdas@asrr.nl")
                     }
+                    developer {
+                        id.set("vanishaov")
+                        name.set("Vanisha Varma")
+                        email.set("vanisha.varma@asrr.nl")
+                    }
                 }
             }
             groupId = "nl.asrr"
@@ -109,8 +114,6 @@ dependencies {
 
     // User mockK
     testImplementation("com.ninja-squad:springmockk:3.0.1")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.1")
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
