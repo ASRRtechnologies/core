@@ -8,8 +8,7 @@ plugins {
     signing
 }
 
-group = "nl.asrr"
-version = "0.1.2"
+
 
 java.sourceCompatibility = JavaVersion.VERSION_11
 
