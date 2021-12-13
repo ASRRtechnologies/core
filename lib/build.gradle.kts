@@ -16,6 +16,7 @@ application {
     mainClass.set("nl.asrr.common.Library")
 }
 
+val springBootDependencyVersion = "2.6.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 java {
@@ -93,11 +94,11 @@ dependencies {
     implementation("com.google.guava:guava:30.0-jre")
 
     // Spring Boot
-    implementation("org.springframework.boot:spring-boot-starter-web:2.6.1")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.6.1")
-    implementation("org.springframework.boot:spring-boot-starter:2.6.1")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.6.1")
-    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.1")
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootDependencyVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:$springBootDependencyVersion")
+    implementation("org.springframework.boot:spring-boot-starter:$springBootDependencyVersion")
+    implementation("org.springframework.boot:spring-boot-starter-security:$springBootDependencyVersion")
+    implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 
 
