@@ -99,6 +99,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
+    implementation("org.springframework.boot:spring-boot-starter-test:$springBootDependencyVersion")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 
 
