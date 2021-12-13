@@ -3,12 +3,17 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
     kotlin("plugin.spring") version "1.4.21-2"
     id("org.springframework.boot") version "2.4.4"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
     `maven-publish`
     signing
+    application
+    jacoco
+}
+
+application {
+    mainClass.set("nl.asrr.common.Library")
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -54,10 +59,11 @@ publishing {
                     }
                 }
             }
-
+            groupId = "nl.asrr"
             artifactId = "common"
 
             from(components["java"])
+            artifact(tasks.bootJar.get())
         }
     }
 }
@@ -82,9 +88,11 @@ dependencies {
     implementation("com.google.guava:guava:30.0-jre")
 
     // Spring Boot
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.6.1")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.6.1")
+    implementation("org.springframework.boot:spring-boot-starter:2.6.1")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.6.1")
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.1")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 
     // Spring Security for authentication
@@ -102,11 +110,13 @@ dependencies {
     // User mockK
     testImplementation("com.ninja-squad:springmockk:3.0.1")
 
-    // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.1")
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    // Use the Kotlin test library.
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api("org.apache.commons:commons-math3:3.6.1")
@@ -118,3 +128,17 @@ tasks.jar {
             "Implementation-Version" to project.version))
     }
 }
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+        xml.destination = file("$buildDir/reports/jacoco/report.xml")
+    }
+}
+
+tasks.withType<Test> {
+    finalizedBy(tasks.jacocoTestReport)
+    useJUnitPlatform()
+}
+
+

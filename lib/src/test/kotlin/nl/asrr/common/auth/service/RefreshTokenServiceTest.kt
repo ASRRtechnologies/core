@@ -10,12 +10,14 @@ import nl.asrr.common.auth.respository.IRefreshTokenRepository
 import nl.asrr.common.auth.util.AuthUtil
 import nl.asrr.common.exceptions.NotFoundException
 import nl.asrr.common.id.IdGenerator
-import org.junit.Assert.assertThrows
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import java.time.LocalDateTime
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class RefreshTokenServiceTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class RefreshTokenServiceTest {
 
     @Test
     fun `generateRefreshToken returns refresh token for given user`() {
@@ -39,7 +41,7 @@ internal class RefreshTokenServiceTest {
         every { refreshTokenRepository.findByToken(any()) } returns null
         val refreshTokenService = createService(refreshTokenRepository = refreshTokenRepository)
 
-        assertThrows(NotFoundException::class.java) {
+        Assertions.assertThrows(NotFoundException::class.java) {
             refreshTokenService.refresh("token")
         }
     }
@@ -51,7 +53,7 @@ internal class RefreshTokenServiceTest {
         every { refreshTokenRepository.findByToken(any()) } returns refreshToken
         val refreshTokenService = createService(refreshTokenRepository = refreshTokenRepository)
 
-        assertThrows(ExpiredRefreshTokenException::class.java) {
+        Assertions.assertThrows(ExpiredRefreshTokenException::class.java) {
             refreshTokenService.refresh("token")
         }
     }
