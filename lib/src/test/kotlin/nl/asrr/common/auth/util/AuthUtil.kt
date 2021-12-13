@@ -2,7 +2,6 @@ package nl.asrr.common.auth.util
 
 import nl.asrr.common.auth.model.BasicUser
 import nl.asrr.common.auth.model.RefreshToken
-import nl.asrr.common.auth.model.Role
 import java.time.LocalDateTime
 
 class AuthUtil {
@@ -32,7 +31,7 @@ class AuthUtil {
                 "fullName",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                roles = mutableSetOf(Role.SUPER_ADMIN.name)
+                roles = mutableSetOf("SUPER_ADMIN")
             )
         }
 
