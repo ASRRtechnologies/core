@@ -2,7 +2,6 @@ plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
     kotlin("plugin.spring") version "1.4.21-2"
-    id("org.springframework.boot") version "2.4.4"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -30,8 +29,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/ASRRtechnologies/lib-asrr-common-kt")
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                username = project.findProperty("github.username") as String? ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN")
             }
         }
     }
@@ -69,7 +68,6 @@ publishing {
             artifactId = "common"
 
             from(components["java"])
-            artifact(tasks.bootJar.get())
         }
     }
 }
@@ -143,5 +141,3 @@ tasks.withType<Test> {
     finalizedBy(tasks.jacocoTestReport)
     useJUnitPlatform()
 }
-
-

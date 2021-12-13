@@ -11,8 +11,7 @@ class AuthUtil {
             email: String = "user@user.nl",
             password: String = "password",
             fullName: String = "fullName",
-            roles: MutableSet<String> = mutableSetOf(),
-            projects: MutableSet<String> = mutableSetOf()
+            roles: MutableSet<String> = mutableSetOf()
         ): BasicUser {
             return BasicUser(
                 "1234",
