@@ -6,7 +6,7 @@ import nl.asrr.common.auth.exception.UnexpectedUserException
 import nl.asrr.common.auth.jwt.JwtTokenUtil
 import nl.asrr.common.auth.model.BasicUser
 import nl.asrr.common.auth.model.RefreshToken
-import nl.asrr.common.auth.respository.IBasicUserRepository
+import nl.asrr.common.auth.respository.IGenericUserRepository
 import nl.asrr.common.auth.respository.IRefreshTokenRepository
 import nl.asrr.common.exceptions.NotFoundException
 import nl.asrr.common.id.IdGenerator
@@ -19,7 +19,7 @@ import java.util.UUID
 
 abstract class GenericRefreshTokenService<T : BasicUser>(
     private val refreshTokenRepository: IRefreshTokenRepository,
-    private val userRepository: IBasicUserRepository<T>,
+    private val userRepository: IGenericUserRepository<T>,
     private val jwtTokenUtil: JwtTokenUtil,
     private val idGenerator: IdGenerator,
     @Value("\${auth.jwt.refresh-expiration-hrs}")

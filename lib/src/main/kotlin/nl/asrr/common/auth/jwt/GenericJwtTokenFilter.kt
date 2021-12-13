@@ -1,7 +1,7 @@
 package nl.asrr.common.auth.jwt
 
 import nl.asrr.common.auth.model.BasicUser
-import nl.asrr.common.auth.respository.IBasicUserRepository
+import nl.asrr.common.auth.respository.IGenericUserRepository
 import nl.asrr.common.exceptions.NotFoundException
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 abstract class GenericJwtTokenFilter<T : BasicUser>(
     private val jwtTokenUtil: JwtTokenUtil,
-    private val userRepository: IBasicUserRepository<T>
+    private val userRepository: IGenericUserRepository<T>
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(

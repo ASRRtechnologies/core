@@ -2,7 +2,7 @@ package nl.asrr.common.auth.config
 
 import nl.asrr.common.auth.jwt.GenericJwtTokenFilter
 import nl.asrr.common.auth.model.BasicUser
-import nl.asrr.common.auth.respository.IBasicUserRepository
+import nl.asrr.common.auth.respository.IGenericUserRepository
 import nl.asrr.common.exceptions.NotFoundException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse
 )
 abstract class GenericSecurityConfiguration<T : BasicUser>(
     private val jwtTokenFilter: GenericJwtTokenFilter<T>,
-    private val userRepository: IBasicUserRepository<T>
+    private val userRepository: IGenericUserRepository<T>
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {

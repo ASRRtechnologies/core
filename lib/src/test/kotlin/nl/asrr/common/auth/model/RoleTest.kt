@@ -1,6 +1,6 @@
 package nl.asrr.common.auth.model
 
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

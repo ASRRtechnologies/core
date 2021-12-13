@@ -1,14 +1,14 @@
 package nl.asrr.common.auth.respository
 
 import nl.asrr.common.auth.model.BasicUser
-import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.stereotype.Repository
 
 /**
- * Generic repository for [BasicUser] types.
+ * Repository for [BasicUser]s
  */
-@NoRepositoryBean
-interface IBasicUserRepository<T : BasicUser> : MongoRepository<T, String> {
-    fun findByEmail(email: String): T?
-    fun deleteByEmail(email: String)
+@Repository
+interface IBasicUserRepository : IGenericUserRepository<BasicUser> {
+    override fun findByEmail(email: String): BasicUser?
+    override fun deleteByEmail(email: String)
+    fun existsByEmail(email: String): Boolean
 }
