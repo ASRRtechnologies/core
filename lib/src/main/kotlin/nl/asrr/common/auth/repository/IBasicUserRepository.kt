@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository
 interface IBasicUserRepository : IGenericUserRepository<BasicUser> {
     override fun findByUsername(username: String): BasicUser?
     override fun deleteByUsername(username: String)
-    fun existsByUsername(email: String): Boolean
+    fun existsByUsername(username: String): Boolean
 }

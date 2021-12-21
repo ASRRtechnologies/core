@@ -48,7 +48,7 @@ class RefreshTokenServiceTest {
 
     @Test
     fun `refresh throws exception when token is expired`() {
-        val refreshToken = RefreshToken("123", "email", "token", LocalDateTime.MIN)
+        val refreshToken = RefreshToken("123", "username", "token", LocalDateTime.MIN)
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
         every { refreshTokenRepository.findByToken(any()) } returns refreshToken
         val refreshTokenService = createService(refreshTokenRepository = refreshTokenRepository)
@@ -60,7 +60,7 @@ class RefreshTokenServiceTest {
 
     @Test
     fun `refresh returns auth response when given valid token`() {
-        val refreshToken = RefreshToken("123", "email", "token", LocalDateTime.MAX)
+        val refreshToken = RefreshToken("123", "username", "token", LocalDateTime.MAX)
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
         every { refreshTokenRepository.findByToken(any()) } returns refreshToken
         every { refreshTokenRepository.save(any()) } returns refreshToken

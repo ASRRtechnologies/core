@@ -36,7 +36,7 @@ class AuthUtil {
         }
 
         fun createRefreshToken(
-            username: String = "email",
+            username: String = "username",
             token: String = "token",
             expires: LocalDateTime = LocalDateTime.now()
         ): RefreshToken {
