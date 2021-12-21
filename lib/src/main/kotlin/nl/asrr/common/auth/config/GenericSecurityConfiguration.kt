@@ -38,8 +38,8 @@ abstract class GenericSecurityConfiguration<T : BasicUser>(
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(
-            UserDetailsService { email ->
-                userRepository.findByEmail(email) ?: throw NotFoundException("Could not find user '$email'")
+            UserDetailsService { username ->
+                userRepository.findByUsername(username) ?: throw NotFoundException("Could not find user '$username'")
             }
         ).passwordEncoder(passwordEncoder())
     }

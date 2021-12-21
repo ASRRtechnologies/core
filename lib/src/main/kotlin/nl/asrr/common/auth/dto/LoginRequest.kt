@@ -8,8 +8,8 @@ data class LoginRequest(
 
     @NotBlank
     @Email
-    @JsonProperty("email")
-    val email: String,
+    @JsonProperty("username")
+    val username: String,
 
     @NotBlank
     @JsonProperty("password")

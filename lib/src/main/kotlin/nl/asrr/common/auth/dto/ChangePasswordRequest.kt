@@ -8,8 +8,8 @@ data class ChangePasswordRequest(
 
     @NotBlank
     @Email
-    @JsonProperty("email")
-    val email: String,
+    @JsonProperty("username")
+    val username: String,
 
     @JsonProperty("oldPassword")
     val oldPassword: String,

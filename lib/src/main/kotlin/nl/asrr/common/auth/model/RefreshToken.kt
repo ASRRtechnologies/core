@@ -11,7 +11,7 @@ data class RefreshToken(
     @Id
     val id: String,
 
-    val email: String,
+    val username: String,
 
     val token: String,
 

@@ -17,7 +17,7 @@ open class BasicUser(
     val id: String,
 
     @Indexed(unique = true)
-    open val email: String,
+    private val username: String,
 
     private var password: String,
 
@@ -59,7 +59,7 @@ open class BasicUser(
     }
 
     override fun getUsername(): String {
-        return email
+        return username
     }
 
     override fun isAccountNonExpired(): Boolean {

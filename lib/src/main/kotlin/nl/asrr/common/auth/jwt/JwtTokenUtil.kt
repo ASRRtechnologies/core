@@ -34,7 +34,7 @@ class JwtTokenUtil {
 
         return Pair(
             Jwts.builder()
-                .setSubject("${user.id},${user.email}")
+                .setSubject("${user.id},${user.username}")
                 .claim("roles", user.roles)
                 .setIssuer(issuer ?: throw InvalidJwtException("JWT issuer cannot be null"))
                 .setIssuedAt(Date())

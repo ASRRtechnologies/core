@@ -29,7 +29,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         val token = UUID.randomUUID().toString()
         val refreshToken = RefreshToken(
             idGenerator.generate(),
-            user.email,
+            user.username,
             token,
             LocalDateTime.now(ZoneId.of("Europe/Amsterdam")).plusHours(expirationHrs)
         )
@@ -43,8 +43,8 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         if (isExpired(refreshToken))
             throw ExpiredRefreshTokenException("Refresh token '$token' has expired, please login again")
 
-        val user = userRepository.findByEmail(refreshToken.email)
-            ?: throw NotFoundException("User '${refreshToken.email}' does not exist")
+        val user = userRepository.findByUsername(refreshToken.username)
+            ?: throw NotFoundException("User '${refreshToken.username}' does not exist")
         val (newAccessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user)
         val newRefreshToken = generateRefreshToken(user)
         refreshTokenRepository.delete(refreshToken)
@@ -52,7 +52,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         return ResponseEntity(
             AuthResponse(
                 idGenerator.generate(),
-                user.email,
+                user.username,
                 newAccessToken,
                 newRefreshToken.token,
                 accessExpires
@@ -65,16 +65,16 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         return ResponseEntity(refreshTokenRepository.findAll(), HttpStatus.OK)
     }
 
-    fun deleteRefreshTokenForUser(user: BasicUser, token: String) {
+    fun deleteRefreshTokenForUser(username: String, token: String) {
         val refreshToken = find(token)
-        if (refreshToken.email != user.email)
+        if (refreshToken.username != username)
             throw UnexpectedUserException("The current user does not match the user linked to the refresh token")
         refreshTokenRepository.delete(refreshToken)
     }
 
     // can be used for something like a "sign out from all devices" method
-    fun deleteAllRefreshTokensForUser(user: BasicUser) {
-        refreshTokenRepository.deleteAllByEmail(user.email)
+    fun deleteAllRefreshTokensForUser(username: String) {
+        refreshTokenRepository.deleteAllByUsername(username)
     }
 
     private fun find(token: String): RefreshToken {

@@ -22,7 +22,7 @@ abstract class GenericAuthService<T : BasicUser>(
     fun login(request: LoginRequest): ResponseEntity<AuthResponse> {
         return try {
             val authentication =
-                authenticationManager.authenticate(UsernamePasswordAuthenticationToken(request.email, request.password))
+                authenticationManager.authenticate(UsernamePasswordAuthenticationToken(request.username, request.password))
 
             val user = authentication.principal as T
 
@@ -32,7 +32,7 @@ abstract class GenericAuthService<T : BasicUser>(
             ResponseEntity.ok(
                 AuthResponse(
                     user.id,
-                    user.email,
+                    user.username,
                     accessToken,
                     refreshToken.token,
                     accessExpires
@@ -48,7 +48,7 @@ abstract class GenericAuthService<T : BasicUser>(
         val authentication = SecurityContextHolder.getContext().authentication
         val user = authentication.principal as T
         try {
-            refreshTokenService.deleteRefreshTokenForUser(user, refreshToken)
+            refreshTokenService.deleteRefreshTokenForUser(user.username, refreshToken)
         } catch (ex: NotFoundException) {
             return ResponseEntity<Void>(HttpStatus.NO_CONTENT)
         } catch (ex: UnexpectedUserException) {

@@ -37,8 +37,8 @@ abstract class GenericJwtTokenFilter<T : BasicUser>(
         }
 
         // get user identity and set it on the spring security context
-        val email = jwtTokenUtil.parseUsername(token)
-        val user = userRepository.findByEmail(email) ?: throw NotFoundException("User '$email' does not exist")
+        val username = jwtTokenUtil.parseUsername(token)
+        val user = userRepository.findByUsername(username) ?: throw NotFoundException("User '$username' does not exist")
         val auth = UsernamePasswordAuthenticationToken(user, null, user.authorities)
         auth.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = auth

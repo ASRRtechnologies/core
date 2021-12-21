@@ -25,14 +25,14 @@ class RefreshTokenServiceTest {
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
         every { refreshTokenRepository.save(any()) } returns RefreshToken(
             "123",
-            user.email,
+            user.username,
             "token",
             LocalDateTime.now()
         )
         val refreshTokenService = createService(refreshTokenRepository = refreshTokenRepository)
 
         val refreshToken = refreshTokenService.generateRefreshToken(user)
-        assertEquals(user.email, refreshToken.email)
+        assertEquals(user.username, refreshToken.username)
     }
 
     @Test
@@ -68,13 +68,13 @@ class RefreshTokenServiceTest {
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
-        every { userRepository.findByEmail(any()) } returns user
+        every { userRepository.findByUsername(any()) } returns user
 
         val refreshTokenService =
             createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
         val response = refreshTokenService.refresh("token").body
 
-        assertEquals(user.email, response.email)
+        assertEquals(user.username, response.username)
     }
 
     private fun createService(
