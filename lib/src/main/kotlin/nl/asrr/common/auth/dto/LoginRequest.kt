@@ -5,11 +5,11 @@ import javax.validation.constraints.NotBlank
 
 data class LoginRequest(
 
-    @NotBlank
+    @field:NotBlank
     @JsonProperty("username")
     val username: String,
 
-    @NotBlank
+    @field:NotBlank
     @JsonProperty("password")
     val password: String
 )

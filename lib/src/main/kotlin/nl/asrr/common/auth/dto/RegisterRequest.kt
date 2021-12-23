@@ -5,15 +5,15 @@ import javax.validation.constraints.NotBlank
 
 data class RegisterRequest(
 
-    @NotBlank
+    @field:NotBlank
     @JsonProperty("username")
     val username: String,
 
-    @NotBlank
+    @field:NotBlank
     @JsonProperty("password")
     val password: String,
 
-    @NotBlank
+    @field:NotBlank
     @JsonProperty("fullName")
     val fullName: String
 )
