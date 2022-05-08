@@ -25,6 +25,7 @@ class GaiaNodeService(private val creation: CreateApplication) {
     }
 
     fun getNodeData(): NodeUpdate {
+        val totalRam = systemInfo.hardware.memory.total
         return NodeUpdate(
             creation.company,
             creation.project,
@@ -33,8 +34,8 @@ class GaiaNodeService(private val creation: CreateApplication) {
             systemInfo.operatingSystem.networkParams.hostName,
             System.getProperty("user.name"),
             "${systemInfo.operatingSystem.family} ${systemInfo.operatingSystem.version}",
-            systemInfo.hardware.memory.swapUsed,
-            systemInfo.hardware.memory.total
+            totalRam - systemInfo.hardware.memory.available,
+            totalRam
         )
     }
 
