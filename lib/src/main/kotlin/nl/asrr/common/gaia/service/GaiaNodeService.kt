@@ -16,12 +16,11 @@ class GaiaNodeService(private val creation: CreateApplication) {
     private val systemInfo = SystemInfo()
 
     init {
-        log.info { "GAIA node registration for application ${creation.name}" }
+        log.info { "Registering GAIA Application: ${creation.company}|${creation.project}|${creation.name}" }
         communicator.registerApplication(creation)
     }
 
     fun updateNode() {
-        log.info { "Updating node" }
         communicator.updateNode(getNodeData())
     }
 

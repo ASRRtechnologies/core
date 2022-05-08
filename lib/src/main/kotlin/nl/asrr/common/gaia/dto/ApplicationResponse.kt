@@ -4,9 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
-@Document
 data class ApplicationResponse(
-        @Id
         val id: String,
         var company: String,
         val project: String,
@@ -16,7 +14,6 @@ data class ApplicationResponse(
 )
 
 data class Node(
-    @Id
     val id: String,
     var machineName: String,
     var lastUpdated: LocalDateTime,
