@@ -101,7 +101,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-test:$springBootDependencyVersion")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
-
+    // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
+    implementation("com.github.oshi:oshi-core:3.4.3")
 
     // Json web tokens for authentication
     implementation("io.jsonwebtoken:jjwt:0.9.1")
@@ -136,6 +137,13 @@ tasks.jacocoTestReport {
     reports {
         xml.isEnabled = true
         xml.destination = file("$buildDir/reports/jacoco/report.xml")
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
     }
 }
 

@@ -3,16 +3,10 @@
  */
 package nl.asrr.common
 
-import org.springframework.boot.runApplication
-
-
 class Library {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
         }
-    }
-    fun someLibraryMethod(): Boolean {
-        return true
     }
 }
