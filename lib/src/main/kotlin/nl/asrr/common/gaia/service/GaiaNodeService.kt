@@ -35,7 +35,8 @@ class GaiaNodeService(private val creation: CreateApplication) {
             System.getProperty("user.name"),
             "${systemInfo.operatingSystem.family} ${systemInfo.operatingSystem.version}",
             totalRam - systemInfo.hardware.memory.available,
-            totalRam
+            totalRam,
+            creation.profile
         )
     }
 

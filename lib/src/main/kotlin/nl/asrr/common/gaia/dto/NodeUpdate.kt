@@ -9,5 +9,6 @@ data class NodeUpdate(
         val user: String? = null,
         val os: String? = null,
         val usedRam: Long? = null,
-        val totalRam: Long? = null
+        val totalRam: Long? = null,
+        val profile: String? = null
 )

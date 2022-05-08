@@ -22,4 +22,5 @@ data class Node(
     var os: String? = null,
     var usedRam: Long? = null,
     var totalRam: Long? = null,
+    var profile: String? = null
 )

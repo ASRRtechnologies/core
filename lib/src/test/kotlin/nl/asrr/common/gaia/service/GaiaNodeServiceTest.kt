@@ -9,7 +9,7 @@ class GaiaNodeServiceTest {
     @Ignore
     @Test
     fun `test machine info`() {
-        val service = GaiaNodeService(CreateApplication("A", "B", "C"))
+        val service = GaiaNodeService(CreateApplication("A", "B", "C", "acc"))
 
         val nodeData = service.getNodeData()
 
