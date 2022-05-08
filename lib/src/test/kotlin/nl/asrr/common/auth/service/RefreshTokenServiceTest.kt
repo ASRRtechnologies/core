@@ -74,7 +74,7 @@ class RefreshTokenServiceTest {
             createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
         val response = refreshTokenService.refresh("token").body
 
-        assertEquals(user.username, response.username)
+        assertEquals(user.username, response!!.username)
     }
 
     private fun createService(
