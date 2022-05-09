@@ -25,7 +25,15 @@ class GaiaNodeService(private val creation: CreateApplication) {
     }
 
     fun getNodeData(): NodeUpdate {
-        val totalRam = systemInfo.hardware.memory.total
+        var totalRam: Long = 0
+        var available: Long = 0
+        try {
+            totalRam = systemInfo.hardware.memory.total
+            available = systemInfo.hardware.memory.available
+        } catch (e: Exception){
+            // Don't spam the logs, this breaks on M1 / arm chips
+        }
+
         return NodeUpdate(
             creation.company,
             creation.project,
@@ -34,7 +42,7 @@ class GaiaNodeService(private val creation: CreateApplication) {
             systemInfo.operatingSystem.networkParams.hostName,
             System.getProperty("user.name"),
             "${systemInfo.operatingSystem.family} ${systemInfo.operatingSystem.version}",
-            totalRam - systemInfo.hardware.memory.available,
+            totalRam - available,
             totalRam,
             creation.profile
         )
