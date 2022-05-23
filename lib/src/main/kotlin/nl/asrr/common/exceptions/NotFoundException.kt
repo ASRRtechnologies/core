@@ -1,3 +1,3 @@
 package nl.asrr.common.exceptions
 
-class NotFoundException(override val message: String?) : Exception(message)
+open class NotFoundException(override val message: String?) : Exception(message)

@@ -1,3 +1,3 @@
 package nl.asrr.common.exceptions
 
-class InvalidOperationException(override val message: String?) : Exception(message)
+open class InvalidOperationException(override val message: String?) : Exception(message)
