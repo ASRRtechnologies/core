@@ -11,9 +11,5 @@ data class RegisterRequest(
 
     @field:NotBlank
     @JsonProperty("password")
-    val password: String,
-
-    @field:NotBlank
-    @JsonProperty("fullName")
-    val fullName: String
+    val password: String
 )

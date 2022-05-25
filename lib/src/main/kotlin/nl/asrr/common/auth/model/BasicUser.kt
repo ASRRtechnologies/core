@@ -21,8 +21,6 @@ open class BasicUser(
 
     private var password: String,
 
-    var fullName: String,
-
     /**
      * Date that the user is created in Europe/Amsterdam time format
      */

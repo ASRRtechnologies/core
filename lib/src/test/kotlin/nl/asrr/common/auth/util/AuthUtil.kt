@@ -9,14 +9,12 @@ class AuthUtil {
         fun createUser(
             username: String = "user@user.nl",
             password: String = "password",
-            fullName: String = "fullName",
             roles: MutableSet<String> = mutableSetOf()
         ): BasicUser {
             return BasicUser(
                 "1234",
                 username,
                 password,
-                fullName,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 roles = roles,
@@ -28,7 +26,6 @@ class AuthUtil {
                 "1234",
                 "admin@admin.nl",
                 "password",
-                "fullName",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 roles = mutableSetOf("SUPER_ADMIN")
