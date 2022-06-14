@@ -6,7 +6,7 @@ import java.time.ZonedDateTime
  * Base modifier entity extension for our entities. Stores modification and creation data.
  * @author Amar Ramdas
  */
-data class BaseModifierEntity(
+abstract class BaseModifierEntity(
     var modifiedBy: String,
     var modifiedAt: ZonedDateTime,
     var createdBy: String,

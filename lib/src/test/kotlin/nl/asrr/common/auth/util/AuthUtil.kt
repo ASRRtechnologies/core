@@ -3,6 +3,7 @@ package nl.asrr.common.auth.util
 import nl.asrr.common.auth.model.BasicUser
 import nl.asrr.common.auth.model.RefreshToken
 import java.time.LocalDateTime
+import java.time.ZonedDateTime.now
 
 class AuthUtil {
     companion object {
@@ -15,8 +16,8 @@ class AuthUtil {
                 "1234",
                 username,
                 password,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                now(),
+                now(),
                 roles = roles,
             )
         }
@@ -26,8 +27,8 @@ class AuthUtil {
                 "1234",
                 "admin@admin.nl",
                 "password",
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                now(),
+                now(),
                 roles = mutableSetOf("SUPER_ADMIN")
             )
         }

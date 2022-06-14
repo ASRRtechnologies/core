@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Simplest form of a user with only basic (required) properties.
@@ -25,13 +25,13 @@ open class BasicUser(
      * Date that the user is created in Europe/Amsterdam time format
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    val created: LocalDateTime,
+    val created: ZonedDateTime,
 
     /**
      * Date that the user is updated in Europe/Amsterdam time format
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    var updated: LocalDateTime,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssZZZZ")
+    var updated: ZonedDateTime,
 
     /**
      * Indicates whether the user is enabled or disabled. A disabled user cannot be authenticated
