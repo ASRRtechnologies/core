@@ -2,8 +2,9 @@
 package nl.asrr.cosmos.generics.controller
 
 import io.swagger.v3.oas.annotations.Operation
-import nl.asrr.cosmos.generics.model.ITenantCrudEntity
-import nl.asrr.cosmos.generics.service.ITenantCrudService
+import nl.asrr.common.generics.controller.ICrudController
+import nl.asrr.common.generics.model.ITenantCrudEntity
+import nl.asrr.common.generics.service.ITenantCrudService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping

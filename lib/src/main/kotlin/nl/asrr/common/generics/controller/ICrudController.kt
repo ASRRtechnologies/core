@@ -1,9 +1,9 @@
 /* Copyright 2017-2022 ASRR B.V. */
-package nl.asrr.cosmos.generics.controller
+package nl.asrr.common.generics.controller
 
 import io.swagger.v3.oas.annotations.Operation
-import nl.asrr.cosmos.generics.model.ICrudEntity
-import nl.asrr.cosmos.generics.service.ICrudService
+import nl.asrr.common.generics.model.ICrudEntity
+import nl.asrr.common.generics.service.ICrudService
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

@@ -1,9 +1,9 @@
 /* Copyright 2017-2022 ASRR B.V. */
-package nl.asrr.cosmos.generics.service
+package nl.asrr.common.generics.service
 
 import nl.asrr.common.exceptions.NotFoundException
-import nl.asrr.cosmos.generics.model.ICrudEntity
-import nl.asrr.cosmos.generics.repository.ICrudRepository
+import nl.asrr.common.generics.model.ICrudEntity
+import nl.asrr.common.generics.repository.ICrudRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 
