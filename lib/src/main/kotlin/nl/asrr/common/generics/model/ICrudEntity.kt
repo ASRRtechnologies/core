@@ -6,5 +6,7 @@ import java.time.ZonedDateTime
 interface ICrudEntity {
     val id: String
     val created: ZonedDateTime
+    val createdBy: String
     val updated: ZonedDateTime
+    val updatedBy: String
 }
