@@ -1,11 +1,11 @@
 package nl.asrr.common.id
 
+import nl.asrr.common.id.MachineInfo.id
 import java.nio.ByteBuffer
 import java.security.SecureRandom
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.experimental.and
 
 /**
  * A threadsafe id generator to generate unique ids with.
@@ -19,7 +19,7 @@ class IdGenerator {
     /**
      * The local counter.
      */
-    private val counter: AtomicInteger
+    private var counter: AtomicInteger
 
     /**
      * Contains a cached instance of the machine hash.
@@ -77,7 +77,11 @@ class IdGenerator {
         val machineBits = getPartialMachineHash(machineHash)
 
         // combine the 3 parts into 1 32-bit integer
-        val machineCounterRandomInfo = machineBits and 0xFFF shl 12 or (counterBits and 0xFFF) shl 8 or ((randomBits and 0xFF.toByte()).toInt())
+        var machineCounterRandomInfo = machineBits and 0xFFF
+        machineCounterRandomInfo = machineCounterRandomInfo shl 12
+        machineCounterRandomInfo = machineCounterRandomInfo or (counterBits and 0xFFF)
+        machineCounterRandomInfo = machineCounterRandomInfo shl 8
+        machineCounterRandomInfo = machineCounterRandomInfo or (randomBits.toInt() and 0xFF)
         val idSize = 96
         val idBuffer = ByteBuffer.allocate(idSize / java.lang.Byte.SIZE)
 
@@ -109,11 +113,9 @@ class IdGenerator {
      */
     private val machineHash: ByteArray?
         get() {
-            val b = ByteArray(20)
-            Random().nextBytes(b)
             var machineHash = cachedMachineHash.get()
             if (machineHash == null) {
-                cachedMachineHash.set(b)
+                cachedMachineHash.set(id)
                 machineHash = cachedMachineHash.get()
             }
             return machineHash
