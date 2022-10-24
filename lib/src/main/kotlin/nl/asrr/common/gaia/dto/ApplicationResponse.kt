@@ -5,12 +5,12 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
 data class ApplicationResponse(
-        val id: String,
-        var company: String,
-        val project: String,
-        val name: String,
-        val updated: LocalDateTime,
-        val nodes: MutableList<Node> = mutableListOf()
+    val id: String,
+    var company: String,
+    val project: String,
+    val name: String,
+    val updated: LocalDateTime,
+    val nodes: MutableList<Node> = mutableListOf()
 )
 
 data class Node(

@@ -19,7 +19,7 @@ abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepositor
         return repository.findAll(PageRequest.of(pageNumber, pageSize ?: 50))
     }
 
-     fun findAll(): List<T> {
+    fun findAll(): List<T> {
         return repository.findAll()
     }
 

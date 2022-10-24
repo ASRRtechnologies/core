@@ -8,7 +8,7 @@ import java.util.*
 class IdGeneratorTest {
 
     @Test
-    fun `generate should be predictable`(){
+    fun `generate should be predictable`() {
         val localTime: Long = 0xBEEF9
         val machineHash = byteArrayOf(0x22.toByte(), 0x33.toByte())
         val counterBits = 0x6688

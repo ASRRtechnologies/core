@@ -30,7 +30,7 @@ class GaiaNodeService(private val creation: CreateApplication) {
         try {
             totalRam = systemInfo.hardware.memory.total
             available = systemInfo.hardware.memory.available
-        } catch (e: Exception){
+        } catch (e: Exception) {
             // Don't spam the logs, this breaks on M1 / arm chips
         }
 
