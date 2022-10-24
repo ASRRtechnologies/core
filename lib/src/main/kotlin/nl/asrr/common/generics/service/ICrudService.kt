@@ -19,7 +19,15 @@ abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepositor
         return repository.findAll(PageRequest.of(pageNumber, pageSize ?: 50))
     }
 
-    fun delete(id: String) {
+     fun findAll(): List<T> {
+        return repository.findAll()
+    }
+
+    open fun delete(id: String) {
         repository.deleteById(id)
+    }
+
+    fun delete(id: List<String>) {
+        repository.deleteAllById(id)
     }
 }

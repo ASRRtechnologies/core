@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.Operation
 import nl.asrr.common.generics.controller.ICrudController
 import nl.asrr.common.generics.model.ITenantCrudEntity
 import nl.asrr.common.generics.service.ITenantCrudService
+import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
 abstract class ITenantCrudController<T : ITenantCrudEntity>(
     override val service: ITenantCrudService<T>
@@ -19,5 +21,19 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun findAllByTenantId(@PathVariable tenantId: String): ResponseEntity<List<ITenantCrudEntity>> {
         return ResponseEntity.ok(service.findAllByTenantId(tenantId))
+    }
+
+    @GetMapping("/tenant/find/{id}/{tenantId}")
+    @Operation(summary = "Find by id and tenantId")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+    open fun findOneByIdAndTenantId(@PathVariable id: String, @PathVariable tenantId: String): ResponseEntity<ITenantCrudEntity> {
+        return ResponseEntity.ok(service.findOneByIdAndTenantId(id, tenantId))
+    }
+
+    @GetMapping("/tenant/page/{tenantId}")
+    @Operation(summary = "Get page by page number and size")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+    open fun getPage(@PathVariable tenantId: String, @RequestParam pageNumber: Int = 0, @RequestParam pageSize: Int? = 50): ResponseEntity<Page<T>> {
+        return ResponseEntity.ok(service.find(tenantId, pageNumber, pageSize))
     }
 }
