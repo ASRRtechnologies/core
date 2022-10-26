@@ -19,13 +19,13 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
 
     @GetMapping
     @Operation(summary = "Find all")
-    open fun findAll(): ResponseEntity<List<ICrudEntity>> {
+    open fun findAll(): ResponseEntity<List<T>> {
         return ResponseEntity.ok(service.findAll())
     }
 
     @GetMapping("/find/{id}")
     @Operation(summary = "Find by id")
-    open fun find(@PathVariable id: String): ResponseEntity<ICrudEntity> {
+    open fun find(@PathVariable id: String): ResponseEntity<T> {
         return ResponseEntity.ok(service.find(id))
     }
 
@@ -49,5 +49,4 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
     open fun delete(@RequestBody ids: List<String>) {
         service.delete(ids)
     }
-
 }
