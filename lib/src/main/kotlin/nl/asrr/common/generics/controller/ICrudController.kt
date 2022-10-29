@@ -31,7 +31,6 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
 
     @GetMapping("/page")
     @Operation(summary = "Get page by page number and size")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     open fun getPage(@RequestParam pageNumber: Int = 0, @RequestParam pageSize: Int? = 50): ResponseEntity<Page<T>> {
         return ResponseEntity.ok(service.find(pageNumber, pageSize))
     }
