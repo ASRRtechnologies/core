@@ -84,6 +84,9 @@ java {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
+    implementation("com.github.oshi:oshi-core:6.3.2")
+
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
@@ -101,8 +104,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-test:$springBootDependencyVersion")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
-    // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
-    implementation("com.github.oshi:oshi-core:6.3.2")
 
     // Json web tokens for authentication
     implementation("io.jsonwebtoken:jjwt:0.9.1")

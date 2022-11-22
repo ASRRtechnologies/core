@@ -11,8 +11,8 @@ class GaiaNodeServiceTest {
     fun `test machine info`() {
         val service = GaiaNodeService(CreateApplication("A", "B", "C", "acc"))
 
-        val nodeData = service.getNodeData()
-
-        nodeData.id
+//        val nodeData = service.getNodeData()
+        service.updateNode()
+//        nodeData.id
     }
 }

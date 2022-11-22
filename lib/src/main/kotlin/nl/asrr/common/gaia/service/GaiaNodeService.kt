@@ -28,8 +28,8 @@ class GaiaNodeService(private val creation: CreateApplication) {
         var totalRam: Long = 0
         var available: Long = 0
         try {
-            totalRam = 0
-            available = 0
+            totalRam = systemInfo.hardware.memory.total
+            available = systemInfo.hardware.memory.available
         } catch (e: Exception) {
             // Don't spam the logs, this breaks on M1 / arm chips
         }
@@ -49,11 +49,10 @@ class GaiaNodeService(private val creation: CreateApplication) {
     }
 
     private fun generateId(): String {
-//        val operatingSystem: OperatingSystem? = systemInfo.operatingSystem operatingSystem?.manufacturer ?: ""
         val hardwareAbstractionLayer: HardwareAbstractionLayer = systemInfo.hardware
         val centralProcessor: CentralProcessor = hardwareAbstractionLayer.processor
         val computerSystem: ComputerSystem = hardwareAbstractionLayer.computerSystem
-        val vendor = "NA"
+        val vendor = systemInfo.operatingSystem?.manufacturer ?: ""
         val processorSerialNumber: String = computerSystem.serialNumber
         val processors: Int = centralProcessor.logicalProcessorCount
         return "$vendor-$processorSerialNumber-$processors"
