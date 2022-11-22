@@ -28,8 +28,8 @@ class GaiaNodeService(private val creation: CreateApplication) {
         var totalRam: Long = 0
         var available: Long = 0
         try {
-            totalRam = systemInfo.hardware.memory.total
-            available = systemInfo.hardware.memory.available
+            totalRam = 0
+            available = 0
         } catch (e: Exception) {
             // Don't spam the logs, this breaks on M1 / arm chips
         }
