@@ -49,11 +49,11 @@ class GaiaNodeService(private val creation: CreateApplication) {
     }
 
     private fun generateId(): String {
-        val operatingSystem: OperatingSystem? = systemInfo.operatingSystem
+//        val operatingSystem: OperatingSystem? = systemInfo.operatingSystem operatingSystem?.manufacturer ?: ""
         val hardwareAbstractionLayer: HardwareAbstractionLayer = systemInfo.hardware
         val centralProcessor: CentralProcessor = hardwareAbstractionLayer.processor
         val computerSystem: ComputerSystem = hardwareAbstractionLayer.computerSystem
-        val vendor: String = operatingSystem?.manufacturer ?: "NA"
+        val vendor = "NA"
         val processorSerialNumber: String = computerSystem.serialNumber
         val processors: Int = centralProcessor.logicalProcessorCount
         return "$vendor-$processorSerialNumber-$processors"
