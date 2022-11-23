@@ -37,9 +37,9 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
         @RequestParam pageNumber: Int = 0,
         @RequestParam pageSize: Int? = 50,
         @RequestParam sortBy: String? = null,
-        @RequestParam direction: Sort.Direction = Sort.DEFAULT_DIRECTION
+        @RequestParam direction: Sort.Direction? = Sort.DEFAULT_DIRECTION
     ): ResponseEntity<Page<T>> {
-        return ResponseEntity.ok(service.find(pageNumber, pageSize, sortBy, direction))
+        return ResponseEntity.ok(service.find(pageNumber, pageSize, sortBy, direction ?: Sort.DEFAULT_DIRECTION))
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
