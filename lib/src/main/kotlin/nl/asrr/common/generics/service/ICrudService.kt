@@ -52,6 +52,15 @@ abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepositor
     }
 
     /**
+     * Check if entity exists
+     * @param id The id of the entity
+     * @return True if entity exists, false otherwise
+     */
+    fun exists(id: String): Boolean {
+        return repository.existsById(id)
+    }
+
+    /**
      * Delete entity by id
      * @param id The id of the entity
      */
