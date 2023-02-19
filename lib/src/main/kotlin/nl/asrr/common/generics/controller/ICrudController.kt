@@ -31,6 +31,12 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
         return ResponseEntity.ok(service.find(id))
     }
 
+    @GetMapping("/find")
+    @Operation(summary = "Find by list of ids")
+    open fun find(@RequestBody ids: List<String>): ResponseEntity<List<T>> {
+        return ResponseEntity.ok(service.find(ids))
+    }
+
     @GetMapping("/page")
     @Operation(summary = "Get page by page number and size with optional sorting based on field to sortBy and direction")
     open fun getPage(
