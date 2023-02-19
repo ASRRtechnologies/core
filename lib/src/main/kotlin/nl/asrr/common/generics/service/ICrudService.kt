@@ -27,7 +27,7 @@ abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepositor
      * Find entities by list of ids
      * @param ids The list of ids
      */
-    fun find(ids: List<String>): List<T> {
+    fun findList(ids: List<String>): List<T> {
         return repository.findAllById(ids).toList()
     }
 

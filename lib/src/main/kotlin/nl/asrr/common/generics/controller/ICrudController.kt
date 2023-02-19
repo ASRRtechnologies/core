@@ -8,14 +8,12 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
-import javax.swing.SortOrder
 
 abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T>) {
 
@@ -33,8 +31,8 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
 
     @GetMapping("/find")
     @Operation(summary = "Find by list of ids")
-    open fun find(@RequestBody ids: List<String>): ResponseEntity<List<T>> {
-        return ResponseEntity.ok(service.find(ids))
+    open fun findList(@RequestBody ids: List<String>): ResponseEntity<List<T>> {
+        return ResponseEntity.ok(service.findList(ids))
     }
 
     @GetMapping("/page")
