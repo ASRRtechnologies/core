@@ -73,8 +73,6 @@ publishing {
                     }
                 }
             }
-            groupId = "nl.asrr"
-            artifactId = "common"
 
             from(components["java"])
         }
