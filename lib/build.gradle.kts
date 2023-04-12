@@ -34,12 +34,15 @@ java {
 
 publishing {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ASRRtechnologies/core")
-            credentials {
-                username = project.findProperty("github.username") as String? ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN")
+        if (version.toString().endsWith("SNAPSHOT")) {
+            maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                name = "nexus"
+                credentials(PasswordCredentials::class)
+            }
+        } else {
+            maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                name = "nexus"
+                credentials(PasswordCredentials::class)
             }
         }
     }
@@ -72,7 +75,13 @@ publishing {
                         email.set("vanisha.varma@asrr.nl")
                     }
                 }
+                scm{
+                    connection.set("scm:git:git://github.com/ASRRtechnologies/core.git")
+                    developerConnection.set("scm:git:ssh://github.com/ASRRtechnologies/core.git")
+                    url.set("https://github.com/ASRRtechnologies/core")
+                }
             }
+            artifactId = "core"
 
             from(components["java"])
         }
