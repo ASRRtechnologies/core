@@ -32,6 +32,10 @@ java {
     withSourcesJar()
 }
 
+signing {
+    sign(publishing.publications)
+}
+
 publishing {
     repositories {
         if (version.toString().endsWith("SNAPSHOT")) {
@@ -49,7 +53,7 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             pom {
-                name.set("ASRR Common Kotlin Libary")
+                name.set("ASRR Core Kotlin Libary")
                 description.set("A library for all common ASRR code")
                 url.set("https://www.asrr.nl")
                 properties.set(
