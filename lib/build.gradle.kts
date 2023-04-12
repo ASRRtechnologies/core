@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    // Apply the org.springframework.boot Plugin to add support for Spring Boot.
+    id("org.springframework.boot") version "3.0.5"
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.4.31"
-    kotlin("plugin.spring") version "1.4.21-2"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    kotlin("plugin.spring") version "1.8.10"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -13,12 +15,17 @@ plugins {
     jacoco
 }
 
-application {
-    mainClass.set("nl.asrr.common.Library")
+repositories {
+    mavenCentral()
+    maven { url = uri("https://repo.spring.io/milestone") }
 }
 
-val springBootDependencyVersion = "2.6.1"
-java.sourceCompatibility = JavaVersion.VERSION_11
+application {
+    mainClass.set("nl.asrr.core.Library")
+}
+
+val springBootDependencyVersion = "3.0.5"
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 java {
     withJavadocJar()
@@ -29,7 +36,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ASRRtechnologies/lib-asrr-common-kt")
+            url = uri("https://maven.pkg.github.com/ASRRtechnologies/core")
             credentials {
                 username = project.findProperty("github.username") as String? ?: System.getenv("GITHUB_USERNAME")
                 password = project.findProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN")
@@ -97,13 +104,14 @@ dependencies {
     implementation("com.google.guava:guava:30.0-jre")
 
     // Spring Boot
+    implementation("org.springframework.boot:spring-boot-starter:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
     implementation("org.springframework.boot:spring-boot-starter-test:$springBootDependencyVersion")
-    implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
 
     // Json web tokens for authentication
     implementation("io.jsonwebtoken:jjwt:0.9.1")
@@ -116,9 +124,6 @@ dependencies {
 
     // User mockK
     testImplementation("com.ninja-squad:springmockk:3.0.1")
-
-    // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
@@ -144,14 +149,14 @@ tasks.jacocoTestReport {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 

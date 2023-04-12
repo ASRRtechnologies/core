@@ -7,7 +7,7 @@
  * in the user manual at https://docs.gradle.org/7.0/userguide/multi_project_builds.html
  */
 
-rootProject.name = "lib-asrr-common"
+rootProject.name = "core"
 include("lib")
 
 
