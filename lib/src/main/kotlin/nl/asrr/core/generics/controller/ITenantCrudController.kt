@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation
 import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.service.ITenantCrudService
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -33,6 +34,6 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @Operation(summary = "Get page by page number and size")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun getPage(@PathVariable tenantId: String, @RequestParam pageNumber: Int = 0, @RequestParam pageSize: Int? = 50): ResponseEntity<Page<T>> {
-        return ResponseEntity.ok(service.find(tenantId, pageNumber, pageSize))
+        return ResponseEntity.ok(service.find(tenantId, PageRequest.of(pageNumber, pageSize ?: 50)))
     }
 }

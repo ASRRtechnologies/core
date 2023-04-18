@@ -4,6 +4,7 @@ package nl.asrr.core.generics.service
 import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 abstract class ITenantCrudService<T : ITenantCrudEntity>(
     override val repository: ITenantCrudRepository<T>
@@ -17,7 +18,7 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
         return repository.findOneByIdAndTenantId(id, tenantId) ?: throw IllegalArgumentException("No entity found with id $id and tenantId $tenantId")
     }
 
-    fun find(tenantId: String, pageNumber: Int, pageSize: Int?): Page<T> {
-        return repository.findAllByTenantId(tenantId, pageNumber, pageSize)
+    fun find(tenantId: String, pageable: Pageable): Page<T> {
+        return repository.findAllByTenantId(tenantId, pageable)
     }
 }
