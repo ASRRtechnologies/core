@@ -9,4 +9,6 @@ interface ITenantCrudRepository<T : ITenantCrudEntity> : ICrudRepository<T> {
     fun findAllByTenantId(tenantId: String): List<T>
     fun findAllByTenantId(tenantId: String, pageable: Pageable): Page<T>
     fun findOneByIdAndTenantId(id: String, tenantId: String): T?
+    fun findAllByIdAndTenantId(ids: List<String>, tenantId: String): List<T>
+    fun deleteAllByIdAndTenantId(ids: List<String>, tenantId: String)
 }
