@@ -27,10 +27,10 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @GetMapping("/tenant/find/{tenantId}/{id}")
     @Operation(summary = "Find by id and tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
-    open fun findOneByIdAndTenantId(
+    open fun findOneByTenantIdAndId(
         @PathVariable tenantId: String,
         @PathVariable id: String,
-    ): ResponseEntity<ITenantCrudEntity> {
+    ): ResponseEntity<T> {
         return ResponseEntity.ok(service.findOneByIdAndTenantId(id, tenantId))
     }
 
