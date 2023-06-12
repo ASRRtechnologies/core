@@ -13,6 +13,10 @@ import org.springframework.data.domain.Sort
  */
 abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepository<T>) {
 
+    fun save(entity: T): T {
+        return repository.save(entity)
+    }
+
     /**
      * Find entity by id
      * @param id The id of the entity
