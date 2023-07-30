@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.ResponseStatus
 
 abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T>) {
 
-    @GetMapping
+    @GetMapping(produces = ["application/json"])
     @Operation(summary = "Find all")
     open fun findAll(): ResponseEntity<List<T>> {
         return ResponseEntity.ok(service.findAll())
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/find/{id}", produces = ["application/json"])
     @Operation(summary = "Find by id")
     open fun find(@PathVariable id: String): ResponseEntity<T> {
         return ResponseEntity.ok(service.find(id))
     }
 
-    @GetMapping("/find")
+    @GetMapping("/find", produces = ["application/json"])
     @Operation(summary = "Find by list of ids")
     open fun findList(@RequestBody ids: List<String>): ResponseEntity<List<T>> {
         return ResponseEntity.ok(service.findList(ids))
     }
 
-    @GetMapping("/page")
+    @GetMapping("/page", produces = ["application/json"])
     @Operation(summary = "Get page by page number and size with optional sorting based on field to sortBy and direction")
     open fun getPage(
         @RequestParam pageNumber: Int = 0,

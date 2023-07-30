@@ -17,14 +17,14 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     override val service: ITenantCrudService<T>
 ) : ICrudController<T>(service) {
 
-    @GetMapping("/find-all/{tenantId}")
+    @GetMapping("/find-all/{tenantId}", produces = ["application/json"])
     @Operation(summary = "Find all by tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun findAllByTenantId(@PathVariable tenantId: String): ResponseEntity<List<ITenantCrudEntity>> {
         return ResponseEntity.ok(service.findAllByTenantId(tenantId))
     }
 
-    @GetMapping("/tenant/find/{tenantId}/{id}")
+    @GetMapping("/tenant/find/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Find by id and tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun findOneByTenantIdAndId(
@@ -34,7 +34,7 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
         return ResponseEntity.ok(service.findOneByIdAndTenantId(id, tenantId))
     }
 
-    @GetMapping("/tenant/page/{tenantId}")
+    @GetMapping("/tenant/page/{tenantId}", produces = ["application/json"])
     @Operation(summary = "Get page by page number and size")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun getPage(
@@ -45,7 +45,7 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
         return ResponseEntity.ok(service.find(tenantId, PageRequest.of(pageNumber, pageSize ?: 50)))
     }
 
-    @DeleteMapping("/tenant/{tenantId}/{id}")
+    @DeleteMapping("/tenant/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Delete by id and tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun delete(@PathVariable tenantId: String, @PathVariable id: String) {
