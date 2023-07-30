@@ -27,7 +27,7 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @GetMapping("/tenant/find/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Find by id and tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
-    open fun findOneByTenantIdAndId(
+    open fun findByTenantIdAndId(
         @PathVariable tenantId: String,
         @PathVariable id: String,
     ): ResponseEntity<T> {
@@ -37,7 +37,7 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @GetMapping("/tenant/page/{tenantId}", produces = ["application/json"])
     @Operation(summary = "Get page by page number and size")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
-    open fun getPage(
+    open fun getTenantPage(
         @PathVariable tenantId: String,
         @RequestParam pageNumber: Int = 0,
         @RequestParam pageSize: Int? = 50
@@ -48,7 +48,7 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @DeleteMapping("/tenant/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Delete by id and tenantId")
     @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
-    open fun delete(@PathVariable tenantId: String, @PathVariable id: String) {
+    open fun deleteByTenantIdAndId(@PathVariable tenantId: String, @PathVariable id: String) {
         return service.delete(tenantId, id)
     }
 }

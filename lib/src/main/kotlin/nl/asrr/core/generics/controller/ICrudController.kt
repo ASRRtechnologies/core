@@ -49,14 +49,14 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete by id")
-    open fun delete(@PathVariable id: String) {
+    open fun deleteById(@PathVariable id: String) {
         service.delete(id)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     @Operation(summary = "Delete by list of ids")
-    open fun delete(@RequestBody ids: List<String>) {
+    open fun deleteList(@RequestBody ids: List<String>) {
         service.delete(ids)
     }
 }
