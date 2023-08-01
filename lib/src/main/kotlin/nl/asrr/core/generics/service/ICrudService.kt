@@ -6,7 +6,9 @@ import nl.asrr.core.generics.model.ICrudEntity
 import nl.asrr.core.generics.repository.ICrudRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.core.query.TextCriteria
 
 /**
  * Generic service for CRUD operations
@@ -42,18 +44,14 @@ abstract class ICrudService<T : ICrudEntity>(open val repository: ICrudRepositor
      * @param sortBy The field to sort by
      * @param sortDirection The sort direction
      */
-    fun find(page: Int = 0, pageSize: Int?, sortBy: String? = null, sortDirection: Sort.Direction = Sort.DEFAULT_DIRECTION): Page<T> {
-        val size = pageSize ?: 50
+    fun find(pageable: Pageable, search: String): Page<T> {
+        if (search.isBlank()) {
+            return repository.findAll(pageable)
+        }
 
-        val pageRequest = sortBy?.let {
-            PageRequest.of(
-                page,
-                size,
-                Sort.by(Sort.Order(sortDirection, sortBy))
-            )
-        } ?: PageRequest.of(page, size)
+        val criteria = TextCriteria().matchingAny(search)
 
-        return repository.findAll(pageRequest)
+        return repository.findAllBy(criteria, pageable)
     }
 
     /**

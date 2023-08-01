@@ -5,6 +5,7 @@ import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.mongodb.core.query.TextCriteria
 
 abstract class ITenantCrudService<T : ITenantCrudEntity>(
     override val repository: ITenantCrudRepository<T>
@@ -19,14 +20,21 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
     }
 
     fun findOneByIdAndTenantId(id: String, tenantId: String): T {
-        return repository.findOneByIdAndTenantId(id, tenantId) ?: throw IllegalArgumentException("No entity found with id $id and tenantId $tenantId")
+        return repository.findOneByIdAndTenantId(id, tenantId)
+            ?: throw IllegalArgumentException("No entity found with id $id and tenantId $tenantId")
     }
 
-    fun find(tenantId: String, pageable: Pageable): Page<T> {
-        return repository.findAllByTenantId(tenantId, pageable)
+    fun find(tenantId: String, pageable: Pageable, search: String): Page<T> {
+        if (search.isBlank()) {
+            return repository.findAllByTenantId(tenantId, pageable)
+        }
+
+        val criteria = TextCriteria().matchingAny(search)
+
+        return repository.findAllByTenantIdAndBy(tenantId, criteria, pageable)
     }
 
-    fun delete(tenantId: String, id: String, ) {
+    fun delete(tenantId: String, id: String) {
         repository.delete(findOneByIdAndTenantId(id, tenantId))
     }
 

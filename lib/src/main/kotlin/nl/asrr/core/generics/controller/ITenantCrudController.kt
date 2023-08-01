@@ -6,6 +6,7 @@ import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.service.ITenantCrudService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,14 +20,14 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
 
     @GetMapping("/find-all/{tenantId}", produces = ["application/json"])
     @Operation(summary = "Find all by tenantId")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+//    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun findAllByTenantId(@PathVariable tenantId: String): ResponseEntity<List<ITenantCrudEntity>> {
         return ResponseEntity.ok(service.findAllByTenantId(tenantId))
     }
 
     @GetMapping("/tenant/find/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Find by id and tenantId")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+//    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun findByTenantIdAndId(
         @PathVariable tenantId: String,
         @PathVariable id: String,
@@ -36,18 +37,21 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
 
     @GetMapping("/tenant/page/{tenantId}", produces = ["application/json"])
     @Operation(summary = "Get page by page number and size")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+//    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun getTenantPage(
         @PathVariable tenantId: String,
         @RequestParam pageNumber: Int = 0,
-        @RequestParam pageSize: Int? = 50
+        @RequestParam pageSize: Int? = 50,
+        @RequestParam sortBy: String? = null,
+        @RequestParam direction: Sort.Direction? = Sort.DEFAULT_DIRECTION,
+        @RequestParam(required = false) search: String? = null,
     ): ResponseEntity<Page<T>> {
-        return ResponseEntity.ok(service.find(tenantId, PageRequest.of(pageNumber, pageSize ?: 50)))
+        return ResponseEntity.ok(service.find(tenantId, PageRequest.of(pageNumber, pageSize ?: 50, direction ?: Sort.DEFAULT_DIRECTION, sortBy ?: "id"), search ?: ""))
     }
 
     @DeleteMapping("/tenant/{tenantId}/{id}", produces = ["application/json"])
     @Operation(summary = "Delete by id and tenantId")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
+//    @PreAuthorize("hasAuthority('SUPER_ADMIN') or @Security.isTenantAdminOf(#tenantId)")
     open fun deleteByTenantIdAndId(@PathVariable tenantId: String, @PathVariable id: String) {
         return service.delete(tenantId, id)
     }

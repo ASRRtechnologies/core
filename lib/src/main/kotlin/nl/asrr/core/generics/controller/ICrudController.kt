@@ -5,15 +5,11 @@ import io.swagger.v3.oas.annotations.Operation
 import nl.asrr.core.generics.model.ICrudEntity
 import nl.asrr.core.generics.service.ICrudService
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 
 abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T>) {
 
@@ -41,9 +37,19 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
         @RequestParam pageNumber: Int = 0,
         @RequestParam pageSize: Int? = 50,
         @RequestParam sortBy: String? = null,
-        @RequestParam direction: Sort.Direction? = Sort.DEFAULT_DIRECTION
+        @RequestParam direction: Sort.Direction? = Sort.DEFAULT_DIRECTION,
+        @RequestParam(required = false) search: String? = null,
     ): ResponseEntity<Page<T>> {
-        return ResponseEntity.ok(service.find(pageNumber, pageSize, sortBy, direction ?: Sort.DEFAULT_DIRECTION))
+        return ResponseEntity.ok(
+            service.find(
+                PageRequest.of(
+                    pageNumber,
+                    pageSize ?: 50,
+                    direction ?: Sort.DEFAULT_DIRECTION,
+                    sortBy ?: "id"
+                ), search ?: ""
+            )
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
