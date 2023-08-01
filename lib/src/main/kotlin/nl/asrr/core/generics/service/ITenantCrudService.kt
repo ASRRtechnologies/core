@@ -31,7 +31,7 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
 
         val criteria = TextCriteria().matchingAny(search)
 
-        return repository.findAllByTenantIdAndBy(tenantId, criteria, pageable)
+        return repository.findAllByTenantIdAnd(tenantId, criteria, pageable)
     }
 
     fun delete(tenantId: String, id: String) {
