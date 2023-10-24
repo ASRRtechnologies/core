@@ -5,11 +5,13 @@ import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.TextCriteria
 
 abstract class ITenantCrudService<T : ITenantCrudEntity>(
-    override val repository: ITenantCrudRepository<T>
-) : ICrudService<T>(repository) {
+    override val repository: ITenantCrudRepository<T>,
+    override val mongoTemplate: MongoTemplate
+) : ICrudService<T>(repository, mongoTemplate) {
 
     fun findAllByTenantId(tenantId: String): List<T> {
         return repository.findAllByTenantId(tenantId)
