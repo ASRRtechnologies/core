@@ -125,8 +125,10 @@ abstract class ICrudService<T : ICrudEntity>(
      * @param id The id of the entity
      * @return True if entity exists, false otherwise
      */
-    fun exists(id: String): Boolean {
-        return repository.existsById(id)
+    fun exists(id: String, strict: Boolean = false): Boolean {
+        val exists =  repository.existsById(id)
+        if (strict && !exists) throw NotFoundException(id)
+        return exists
     }
 
     /**
