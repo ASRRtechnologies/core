@@ -92,8 +92,8 @@ abstract class ICrudService<T : ICrudEntity>(
         search: IEntitySearch,
         pageNumber: Int,
         pageSize: Int,
-        sortBy: String,
-        direction: Sort.Direction
+        sortBy: String?,
+        direction: Sort.Direction?
     ): Page<T> {
         val matcher = UntypedExampleMatcher.matchingAny()
             .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
@@ -101,15 +101,18 @@ abstract class ICrudService<T : ICrudEntity>(
             .withIgnoreNullValues()
 
         val example = Example.of(search, matcher)
-        val sort = Sort.by(direction, sortBy)
-        val query = Query(Criteria().alike(example)).with(sort)
+        val sort = Sort.by(direction ?: Sort.DEFAULT_DIRECTION, sortBy)
+
+        val query = sortBy?.let { Query(Criteria().alike(example)).with(sort) }
+            ?: Query(Criteria().alike(example))
         val totalItems = mongoTemplate.find(query, T::class.java)
 
         val page = PagedListHolder(totalItems)
         page.page = pageNumber
         page.pageSize = pageSize
 
-        val pageable = PageRequest.of(pageNumber, pageSize, sort)
+        val pageable = sortBy?.let { PageRequest.of(pageNumber, pageSize, sort) }
+            ?:  PageRequest.of(pageNumber, pageSize)
         return PageImpl(page.pageList, pageable, totalItems.size.toLong())
     }
 
