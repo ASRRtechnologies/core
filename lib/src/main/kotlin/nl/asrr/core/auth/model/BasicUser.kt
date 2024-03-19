@@ -41,7 +41,9 @@ open class BasicUser(
     /**
      * The roles of the user
      */
-    var roles: MutableSet<String> = mutableSetOf()
+    var roles: MutableSet<String> = mutableSetOf(),
+
+    var lastLogin: ZonedDateTime? = null
 
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
