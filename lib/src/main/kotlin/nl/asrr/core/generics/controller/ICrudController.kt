@@ -27,7 +27,7 @@ abstract class ICrudController<T : ICrudEntity>(open val service: ICrudService<T
 
     @GetMapping("/find", produces = ["application/json"])
     @Operation(summary = "Find by list of ids")
-    open fun findList(@RequestBody ids: List<String>): ResponseEntity<List<T>> {
+    open fun findList(@RequestParam ids: List<String>): ResponseEntity<List<T>> {
         return ResponseEntity.ok(service.findList(ids))
     }
 
