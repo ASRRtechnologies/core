@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
+import java.time.ZonedDateTime
+import java.time.ZonedDateTime.now
 
 abstract class GenericJwtTokenFilter<T : BasicUser>(
     private val jwtTokenUtil: JwtTokenUtil,
@@ -42,6 +44,10 @@ abstract class GenericJwtTokenFilter<T : BasicUser>(
         val auth = UsernamePasswordAuthenticationToken(user, null, user.authorities)
         auth.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = auth
+
+        // update last login date
+        user.lastLogin = now()
+        userRepository.save(user)
 
         filterChain.doFilter(request, response)
     }
