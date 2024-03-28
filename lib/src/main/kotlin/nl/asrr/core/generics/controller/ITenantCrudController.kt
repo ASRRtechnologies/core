@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 
 abstract class ITenantCrudController<T : ITenantCrudEntity>(
     override val service: ITenantCrudService<T>,
-    val securityService: ISecurityService
+    open val securityService: ISecurityService
 ) : ICrudController<T>(service) {
 
     // region TenantInjection
