@@ -1,0 +1,25 @@
+language: java
+jdk: openjdk17
+install: skip
+services:
+  - docker
+  - mongodb
+
+before_install:
+  - chmod +x gradlew
+
+script:
+  - ./gradlew build --no-daemon
+  - ./gradlew publish
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
