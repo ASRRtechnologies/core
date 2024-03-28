@@ -1,6 +1,7 @@
 /* Copyright 2017-2022 ASRR B.V. */
 package nl.asrr.core.generics.service
 
+import nl.asrr.core.auth.service.ISecurityService
 import nl.asrr.core.exceptions.NotFoundException
 import nl.asrr.core.generics.model.ICrudEntity
 import nl.asrr.core.generics.model.IEntitySearch
@@ -18,16 +19,20 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.data.mongodb.core.query.UntypedExampleMatcher
+import java.time.ZonedDateTime
 
 /**
  * Generic service for CRUD operations
  */
 abstract class ICrudService<T : ICrudEntity>(
     open val repository: ICrudRepository<T>,
-    open val mongoTemplate: MongoTemplate
+    open val mongoTemplate: MongoTemplate,
+    open val securityService: ISecurityService
 ) {
 
     open fun save(entity: T): T {
+        entity.updated = ZonedDateTime.now()
+        entity.updatedBy = securityService.getUserId()
         return repository.save(entity)
     }
 

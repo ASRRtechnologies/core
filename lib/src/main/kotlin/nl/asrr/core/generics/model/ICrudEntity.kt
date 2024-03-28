@@ -7,6 +7,6 @@ interface ICrudEntity {
     val id: String
     val created: ZonedDateTime
     val createdBy: String
-    val updated: ZonedDateTime
-    val updatedBy: String
+    var updated: ZonedDateTime
+    var updatedBy: String
 }
