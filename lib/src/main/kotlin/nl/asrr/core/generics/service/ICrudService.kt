@@ -40,7 +40,7 @@ abstract class ICrudService<T : ICrudEntity>(
      * Find entity by id
      * @param id The id of the entity
      */
-    fun find(id: String): T {
+    open fun find(id: String): T {
         val found = repository.findById(id)
         if (found.isEmpty) throw NotFoundException(id)
         return found.get()
@@ -50,7 +50,7 @@ abstract class ICrudService<T : ICrudEntity>(
      * Find entities by list of ids
      * @param ids The list of ids
      */
-    fun findList(ids: List<String>): List<T> {
+    open fun findList(ids: List<String>): List<T> {
         return repository.findAllById(ids).toList()
     }
 
@@ -61,7 +61,7 @@ abstract class ICrudService<T : ICrudEntity>(
      * @param sortBy The field to sort by
      * @param sortDirection The sort direction
      */
-    fun find(pageable: Pageable, search: String): Page<T> {
+    open fun find(pageable: Pageable, search: String): Page<T> {
         if (search.isBlank()) {
             return repository.findAll(pageable)
         }
@@ -124,7 +124,7 @@ abstract class ICrudService<T : ICrudEntity>(
     /**
      * Find all entities
      */
-    fun findAll(): List<T> {
+    open fun findAll(): List<T> {
         return repository.findAll()
     }
 
@@ -133,7 +133,7 @@ abstract class ICrudService<T : ICrudEntity>(
      * @param id The id of the entity
      * @return True if entity exists, false otherwise
      */
-    fun exists(id: String, strict: Boolean = false): Boolean {
+    open fun exists(id: String, strict: Boolean = false): Boolean {
         val exists =  repository.existsById(id)
         if (strict && !exists) throw NotFoundException(id)
         return exists
@@ -151,7 +151,7 @@ abstract class ICrudService<T : ICrudEntity>(
      * Delete entities by list of ids
      * @param ids The list of ids
      */
-    fun delete(ids: List<String>) {
+    open fun delete(ids: List<String>) {
         repository.deleteAllById(ids)
     }
 }

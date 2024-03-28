@@ -2,6 +2,7 @@
 package nl.asrr.core.generics.service
 
 import nl.asrr.core.auth.service.ISecurityService
+import nl.asrr.core.exceptions.NotFoundException
 import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
 import org.springframework.data.domain.Page
@@ -15,20 +16,17 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
     override val securityService: ISecurityService
 ) : ICrudService<T>(repository, mongoTemplate, securityService) {
 
-    fun findAllByTenantId(tenantId: String): List<T> {
-        return repository.findAllByTenantId(tenantId)
+    override fun find(id: String): T {
+        return repository.findOneByIdAndTenantId(id, securityService.getTenantId()) ?: throw NotFoundException(id)
     }
 
-    fun findAllByIdAndTenantId(ids: List<String>, tenantId: String): List<T> {
-        return repository.findAllByIdAndTenantId(ids, tenantId)
+    override fun findList(ids: List<String>): List<T> {
+        return repository.findAllByIdAndTenantId(ids, securityService.getTenantId())
     }
 
-    fun findOneByIdAndTenantId(id: String, tenantId: String): T {
-        return repository.findOneByIdAndTenantId(id, tenantId)
-            ?: throw IllegalArgumentException("No entity found with id $id and tenantId $tenantId")
-    }
+    override fun find(pageable: Pageable, search: String): Page<T> {
+        val tenantId = securityService.getTenantId()
 
-    fun find(tenantId: String, pageable: Pageable, search: String): Page<T> {
         if (search.isBlank()) {
             return repository.findAllByTenantId(tenantId, pageable)
         }
@@ -38,11 +36,22 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
         return repository.findAllByTenantId(tenantId, criteria, pageable)
     }
 
-    fun delete(tenantId: String, id: String) {
-        repository.delete(findOneByIdAndTenantId(id, tenantId))
+    override fun findAll(): List<T> {
+        return repository.findAllByTenantId(securityService.getTenantId())
     }
 
-    fun deleteList(ids: List<String>, tenantId: String) {
-        repository.deleteAllByIdAndTenantId(ids, tenantId)
+    override fun exists(id: String, strict: Boolean): Boolean {
+        val exists = repository.existsByTenantIdAndId(securityService.getTenantId(), id)
+        if (strict && !exists) throw NotFoundException(id)
+        return exists
     }
+
+    override fun delete(id: String) {
+        repository.deleteByIdAndTenantId(id, securityService.getTenantId())
+    }
+
+    override fun delete(ids: List<String>) {
+        repository.deleteAllByIdAndTenantId(ids, securityService.getTenantId())
+    }
+
 }

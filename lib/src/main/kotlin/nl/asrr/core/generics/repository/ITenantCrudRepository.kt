@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.core.query.TextCriteria
 
 interface ITenantCrudRepository<T : ITenantCrudEntity> : ICrudRepository<T> {
+    fun existsByTenantIdAndId(tenantId: String, id: String): Boolean
     fun findAllByTenantId(tenantId: String): List<T>
     fun findAllByTenantId(tenantId: String, pageable: Pageable): Page<T>
     fun findAllByTenantId(tenantId: String, criteria: TextCriteria, pageable: Pageable): Page<T>
     fun findOneByIdAndTenantId(id: String, tenantId: String): T?
     fun findAllByIdAndTenantId(ids: List<String>, tenantId: String): List<T>
     fun deleteAllByIdAndTenantId(ids: List<String>, tenantId: String)
+    fun deleteByIdAndTenantId(id: String, tenantId: String)
 }

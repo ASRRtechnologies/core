@@ -13,27 +13,26 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 abstract class ITenantCrudController<T : ITenantCrudEntity>(
-    override val service: ITenantCrudService<T>,
-    open val securityService: ISecurityService
+    override val service: ITenantCrudService<T>, open val securityService: ISecurityService
 ) : ICrudController<T>(service) {
 
     // region TenantInjection
     @GetMapping("/find-all", produces = ["application/json"])
     @Operation(summary = "Find all for current tenant")
     override fun findAll(): ResponseEntity<List<T>> {
-        return ResponseEntity.ok(service.findAllByTenantId(securityService.getTenantId()))
+        return ResponseEntity.ok(service.findAll())
     }
 
     @GetMapping("/find/{id}", produces = ["application/json"])
     @Operation(summary = "Find by id in current tenant")
     override fun find(@PathVariable id: String): ResponseEntity<T> {
-        return ResponseEntity.ok(service.findOneByIdAndTenantId(securityService.getTenantId(), id))
+        return ResponseEntity.ok(service.find(id))
     }
 
     @GetMapping("/find", produces = ["application/json"])
     @Operation(summary = "Find by list of ids in current tenant")
     override fun findList(@RequestParam ids: List<String>): ResponseEntity<List<T>> {
-        return ResponseEntity.ok(service.findAllByIdAndTenantId(ids, securityService.getTenantId()))
+        return ResponseEntity.ok(service.findList(ids))
     }
 
     @GetMapping("/page", produces = ["application/json"])
@@ -47,12 +46,8 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     ): ResponseEntity<Page<T>> {
         return ResponseEntity.ok(
             service.find(
-                securityService.getTenantId(),
                 PageRequest.of(
-                    pageNumber,
-                    pageSize ?: 50,
-                    direction ?: Sort.DEFAULT_DIRECTION,
-                    sortBy ?: "id"
+                    pageNumber, pageSize ?: 50, direction ?: Sort.DEFAULT_DIRECTION, sortBy ?: "id"
                 ), search ?: ""
             )
         )
@@ -62,14 +57,14 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete by id in current tenant")
     override fun deleteById(@PathVariable id: String) {
-        service.delete(securityService.getTenantId(), id)
+        service.delete(id)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     @Operation(summary = "Delete by list of ids in current tenant")
     override fun deleteList(@RequestBody ids: List<String>) {
-        service.deleteList(ids, securityService.getTenantId())
+        service.delete(ids)
     }
     // endregion TenantInjection
 
