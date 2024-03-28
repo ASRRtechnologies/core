@@ -73,37 +73,4 @@ abstract class ITenantCrudController<T : ITenantCrudEntity>(
     }
     // endregion TenantInjection
 
-    @GetMapping("/find-all/{tenantId}", produces = ["application/json"])
-    @Operation(summary = "Find all by tenantId ")
-    open fun findAllByTenantId(@PathVariable tenantId: String): ResponseEntity<List<ITenantCrudEntity>> {
-        return ResponseEntity.ok(service.findAllByTenantId(tenantId))
-    }
-
-    @GetMapping("/tenant/find/{tenantId}/{id}", produces = ["application/json"])
-    @Operation(summary = "Find by id and tenantId")
-    open fun findByTenantIdAndId(
-        @PathVariable tenantId: String,
-        @PathVariable id: String,
-    ): ResponseEntity<T> {
-        return ResponseEntity.ok(service.findOneByIdAndTenantId(id, tenantId))
-    }
-
-    @GetMapping("/tenant/page/{tenantId}", produces = ["application/json"])
-    @Operation(summary = "Get page by page number and size")
-    open fun getTenantPage(
-        @PathVariable tenantId: String,
-        @RequestParam pageNumber: Int = 0,
-        @RequestParam pageSize: Int? = 50,
-        @RequestParam sortBy: String? = null,
-        @RequestParam direction: Sort.Direction? = Sort.DEFAULT_DIRECTION,
-        @RequestParam(required = false) search: String? = null,
-    ): ResponseEntity<Page<T>> {
-        return ResponseEntity.ok(service.find(tenantId, PageRequest.of(pageNumber, pageSize ?: 50, direction ?: Sort.DEFAULT_DIRECTION, sortBy ?: "id"), search ?: ""))
-    }
-
-    @DeleteMapping("/tenant/{tenantId}/{id}", produces = ["application/json"])
-    @Operation(summary = "Delete by id and tenantId")
-    open fun deleteByTenantIdAndId(@PathVariable tenantId: String, @PathVariable id: String) {
-        return service.delete(tenantId, id)
-    }
 }
