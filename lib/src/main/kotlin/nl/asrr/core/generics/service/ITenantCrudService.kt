@@ -21,7 +21,7 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
     }
 
     override fun findList(ids: List<String>): List<T> {
-        return repository.findAllByIdAndTenantId(ids, securityService.getTenantId())
+        return repository.findAllByIdInAndTenantId(ids, securityService.getTenantId())
     }
 
     override fun find(pageable: Pageable, search: String): Page<T> {
