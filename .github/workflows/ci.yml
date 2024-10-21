@@ -42,13 +42,6 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
-      # Optional: Upload coverage reports to Codecov
-      # - name: Upload coverage reports to Codecov
-      #   uses: codecov/codecov-action@v3
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
-      #     directory: ./src/backend/build/reports/jacoco
-
       # Set up Node.js for Semantic Release
       - name: Set up Node.js
         uses: actions/setup-node@v3
