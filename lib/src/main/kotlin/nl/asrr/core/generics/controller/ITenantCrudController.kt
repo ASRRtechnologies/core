@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 abstract class ITenantCrudController<T : ITenantCrudEntity>(
-    override val service: ITenantCrudService<T>, open val securityService: ISecurityService
+    override val service: ITenantCrudService<T>
 ) : ICrudController<T>(service) {
 
     // region TenantInjection

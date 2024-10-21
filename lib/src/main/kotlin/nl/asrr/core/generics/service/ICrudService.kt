@@ -154,4 +154,8 @@ abstract class ICrudService<T : ICrudEntity>(
     open fun delete(ids: List<String>) {
         repository.deleteAllById(ids)
     }
+
+    open fun import(entities: List<T>): List<T> {
+        return repository.saveAll(entities)
+    }
 }
