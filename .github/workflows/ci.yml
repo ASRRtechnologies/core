@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "dev" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-#  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,14 +26,23 @@ jobs:
 
       - name: Build Gradle
         run: ./gradlew build
+
+      # Publish the artifact to Nexus
+      - name: Publish to Nexus
+        run: ./gradlew publish --no-daemon
         working-directory: ./src/backend
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
 
-#      - name: Upload coverage reports to Codecov
-#        uses: codecov/codecov-action@v3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          directory: ./src/backend/build/reports/jacoco
+      # Optional: Upload coverage reports to Codecov
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     directory: ./src/backend/build/reports/jacoco
 
+      # Set up Node.js for Semantic Release
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -44,7 +50,8 @@ jobs:
 
       - name: Set up semantic-release
         run: npm install -g semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/exec semantic-release/git semantic-release/release-notes-generator conventional-changelog-conventionalcommits
-  
+
+      # Run Semantic Release to create releases based on commit messages
       - name: Release
         env:
           GIT_AUTHOR_NAME: asrr[bot]
