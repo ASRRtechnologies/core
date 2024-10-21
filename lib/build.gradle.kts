@@ -41,12 +41,18 @@ publishing {
         if (version.toString().endsWith("SNAPSHOT")) {
             maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
                 name = "nexus"
-                credentials(PasswordCredentials::class)
+                credentials {
+                    username = findProperty("nexusUsername")?.toString() ?: System.getenv("NEXUS_USERNAME")
+                    password = findProperty("nexusPassword")?.toString() ?: System.getenv("NEXUS_PASSWORD")
+                }
             }
         } else {
             maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
                 name = "nexus"
-                credentials(PasswordCredentials::class)
+                credentials {
+                    username = findProperty("nexusUsername")?.toString() ?: System.getenv("NEXUS_USERNAME")
+                    password = findProperty("nexusPassword")?.toString() ?: System.getenv("NEXUS_PASSWORD")
+                }
             }
         }
     }
