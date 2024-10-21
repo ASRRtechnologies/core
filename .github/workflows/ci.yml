@@ -30,7 +30,6 @@ jobs:
       # Publish the artifact to Nexus
       - name: Publish to Nexus
         run: ./gradlew publish --no-daemon
-        working-directory: ./src/backend
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
