@@ -27,12 +27,20 @@ jobs:
       - name: Build Gradle
         run: ./gradlew build
 
-      # Publish the artifact to Nexus
+      # Import the GPG private key into the environment
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
       - name: Publish to Nexus
         run: ./gradlew publish --no-daemon
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       # Optional: Upload coverage reports to Codecov
       # - name: Upload coverage reports to Codecov
