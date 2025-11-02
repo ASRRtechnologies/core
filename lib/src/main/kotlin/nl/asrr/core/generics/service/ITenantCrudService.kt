@@ -17,9 +17,8 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
 ) : ICrudService<T>(repository, mongoTemplate, securityService) {
 
     override fun find(id: String): T {
-        return repository.findOneByIdAndTenantId(id, securityService.getTenantId()) ?: throw NotFoundException(
-            "${this::class.simpleName} with id $id not found"
-        )
+        return repository.findOneByIdAndTenantId(id, securityService.getTenantId())
+            ?: throw NotFoundException("${this::class.simpleName} with id $id not found")
     }
 
     override fun findList(ids: List<String>): List<T> {
@@ -55,5 +54,4 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
     override fun delete(ids: List<String>) {
         repository.deleteAllByIdAndTenantId(ids, securityService.getTenantId())
     }
-
 }
