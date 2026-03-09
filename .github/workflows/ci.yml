@@ -34,14 +34,6 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
-      - name: Publish to Nexus
-        run: ./gradlew publish --no-daemon
-        env:
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
       # Set up Node.js for Semantic Release
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -53,9 +45,14 @@ jobs:
 
       # Run Semantic Release to create releases based on commit messages
       - name: Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         env:
           GIT_AUTHOR_NAME: asrr[bot]
           GIT_COMMITTER_EMAIL: dev@asrr.nl
           GIT_COMMITTER_NAME: asrr[bot]
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_TOKEN }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: npx semantic-release
