@@ -1,5 +1,11 @@
 # Core Changelog
 
+## [0.2.4](https://github.com/ASRRtechnologies/core/compare/v0.2.4%0Dv0.2.3#diff) (2026-03-09)
+
+### Bug Fixes
+
+* migrate to proper maven central publishing setup ([c44a671](https://github.com/ASRRtechnologies/core/commits/c44a6719bbb73fc3910c47d057655334231d962f))
+
 ## [0.2.3](https://github.com/ASRRtechnologies/core/compare/v0.2.3%0Dv0.2.2#diff) (2026-03-09)
 
 ### Bug Fixes
