@@ -19,7 +19,7 @@
       "@semantic-release/changelog",
       {
         "changelogFile": "CHANGELOG.md",
-        "changelogTitle": "# Core Changelog"
+        "changelogTitle": "# ASRR Core Kotlin Package Changelog"
       }
     ],
     [
