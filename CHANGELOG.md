@@ -1,5 +1,11 @@
 # Core Changelog
 
+## [0.2.1](https://github.com/ASRRtechnologies/core/compare/v0.2.1%0Dv0.2.0#diff) (2026-03-09)
+
+### Bug Fixes
+
+* revert back to using GITHUB_TOKEN ([b74a11a](https://github.com/ASRRtechnologies/core/commits/b74a11a2cbcba1e26fd46476e365173939ee830c))
+
 ## [0.2.0](https://github.com/ASRRtechnologies/core/compare/v0.2.0%0Dv0.1.3#diff) (2026-03-09)
 
 ### Features
