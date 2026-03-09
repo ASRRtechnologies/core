@@ -34,7 +34,6 @@ java {
 }
 
 signing {
-    // Use in-memory PGP keys (2-arg version auto-detects key ID from armored key)
     val password = findProperty("signing.password")?.toString() ?: System.getenv("GPG_PASSPHRASE")
     val secretKey = findProperty("signing.key")?.toString() ?: System.getenv("GPG_PRIVATE_KEY")
 
@@ -44,16 +43,16 @@ signing {
 
 publishing {
     publications {
-        register<MavenPublication>("gpr") {
+        register<MavenPublication>("mavenJava") {
+            groupId = "nl.asrr"
+            artifactId = "core"
+
+            from(components["java"])
+
             pom {
                 name.set("ASRR Core Kotlin Library")
                 description.set("A library for all common ASRR code")
                 url.set("https://www.asrr.nl")
-                properties.set(
-                    mapOf(
-                        "version" to version
-                    )
-                )
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
@@ -72,21 +71,18 @@ publishing {
                         email.set("vanisha.varma@asrr.nl")
                     }
                 }
-                scm{
+                scm {
                     connection.set("scm:git:git://github.com/ASRRtechnologies/core.git")
                     developerConnection.set("scm:git:ssh://github.com/ASRRtechnologies/core.git")
                     url.set("https://github.com/ASRRtechnologies/core")
                 }
             }
-            artifactId = "core"
-
-            from(components["java"])
         }
     }
 }
 
+
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
@@ -141,15 +137,8 @@ tasks.jar {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = true
-        xml.destination = file("$buildDir/reports/jacoco/report.xml")
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        xml.required.set(true)
+        xml.outputLocation.set(file("${layout.buildDirectory.get().asFile}/reports/jacoco/report.xml"))
     }
 }
 
