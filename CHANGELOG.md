@@ -1,5 +1,11 @@
 # Core Changelog
 
+## [0.2.3](https://github.com/ASRRtechnologies/core/compare/v0.2.3%0Dv0.2.2#diff) (2026-03-09)
+
+### Bug Fixes
+
+* use diff useInMemoryPgpKeys signature ([e016399](https://github.com/ASRRtechnologies/core/commits/e016399e96f48663fd351a958eee0e3c41fb75e7))
+
 ## [0.2.2](https://github.com/ASRRtechnologies/core/compare/v0.2.2%0Dv0.2.1#diff) (2026-03-09)
 
 ### Bug Fixes
