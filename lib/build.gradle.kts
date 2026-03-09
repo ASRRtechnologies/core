@@ -13,6 +13,7 @@ plugins {
     signing
     application
     jacoco
+    id("io.github.sgtsilvio.gradle.maven-central-publishing") version "0.4.1"
 }
 
 repositories {
@@ -43,29 +44,10 @@ signing {
 }
 
 publishing {
-    repositories {
-        if (version.toString().endsWith("SNAPSHOT")) {
-            maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-                name = "nexus"
-                credentials {
-                    username = findProperty("nexusUsername")?.toString() ?: System.getenv("NEXUS_USERNAME")
-                    password = findProperty("nexusPassword")?.toString() ?: System.getenv("NEXUS_PASSWORD")
-                }
-            }
-        } else {
-            maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                name = "nexus"
-                credentials {
-                    username = findProperty("nexusUsername")?.toString() ?: System.getenv("NEXUS_USERNAME")
-                    password = findProperty("nexusPassword")?.toString() ?: System.getenv("NEXUS_PASSWORD")
-                }
-            }
-        }
-    }
     publications {
         register<MavenPublication>("gpr") {
             pom {
-                name.set("ASRR Core Kotlin Libary")
+                name.set("ASRR Core Kotlin Library")
                 description.set("A library for all common ASRR code")
                 url.set("https://www.asrr.nl")
                 properties.set(
