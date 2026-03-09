@@ -40,6 +40,23 @@ jobs:
       - name: Set up semantic-release
         run: npm install -g semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/exec semantic-release/git semantic-release/release-notes-generator conventional-changelog-conventionalcommits
 
+      # Debug: verify GPG secrets are set (prints length only, not values)
+      - name: Verify GPG secrets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          echo "GPG_KEY_ID length: ${#GPG_KEY_ID}"
+          echo "GPG_PRIVATE_KEY length: ${#GPG_PRIVATE_KEY}"
+          echo "GPG_PASSPHRASE length: ${#GPG_PASSPHRASE}"
+          echo "GPG_KEY_ID is set: $( [ -n "$GPG_KEY_ID" ] && echo YES || echo NO )"
+          echo "GPG_PRIVATE_KEY is set: $( [ -n "$GPG_PRIVATE_KEY" ] && echo YES || echo NO )"
+          echo "GPG_PASSPHRASE is set: $( [ -n "$GPG_PASSPHRASE" ] && echo YES || echo NO )"
+          echo "GPG_PRIVATE_KEY contains BEGIN marker: $(echo "$GPG_PRIVATE_KEY" | grep -c 'BEGIN PGP')"
+          echo "GPG_PRIVATE_KEY line count: $(echo "$GPG_PRIVATE_KEY" | wc -l)"
+
       # Run Semantic Release to create releases based on commit messages
       - name: Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
