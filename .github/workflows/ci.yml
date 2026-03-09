@@ -27,13 +27,6 @@ jobs:
       - name: Build Gradle
         run: ./gradlew build
 
-      # Import the GPG private key into the environment
-      - name: Import GPG key
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
       # Set up Node.js for Semantic Release
       - name: Set up Node.js
         uses: actions/setup-node@v3
