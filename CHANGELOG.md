@@ -1,5 +1,12 @@
 # Core Changelog
 
+## [0.2.2](https://github.com/ASRRtechnologies/core/compare/v0.2.2%0Dv0.2.1#diff) (2026-03-09)
+
+### Bug Fixes
+
+* configure maven central publishing ([fda8592](https://github.com/ASRRtechnologies/core/commits/fda859220bdb82ac0213b6cbf7ff9150b7e73bc3))
+* remove incorrect API for maven central publishing ([d469f39](https://github.com/ASRRtechnologies/core/commits/d469f39593608aaf1ccfd9833adec090b259071b))
+
 ## [0.2.1](https://github.com/ASRRtechnologies/core/compare/v0.2.1%0Dv0.2.0#diff) (2026-03-09)
 
 ### Bug Fixes
