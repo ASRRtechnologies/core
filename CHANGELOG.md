@@ -1,5 +1,11 @@
 # ASRR Core Kotlin Package Changelog
 
+## [0.2.6](https://github.com/ASRRtechnologies/core/compare/v0.2.6%0Dv0.2.5#diff) (2026-03-09)
+
+### Bug Fixes
+
+* actually use semantic versioning on publish (please let this be the final commit) ([86f32c5](https://github.com/ASRRtechnologies/core/commits/86f32c5eea44b10f9aa5ace297b7e67f76a0f981))
+
 ## [0.2.5](https://github.com/ASRRtechnologies/core/compare/v0.2.5%0Dv0.2.4#diff) (2026-03-09)
 
 ### Bug Fixes
