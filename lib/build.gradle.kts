@@ -86,11 +86,6 @@ publishing {
     }
 }
 
-mavenCentralPublishing {
-    publishingType.set("AUTOMATIC")
-    coordinates("nl.asrr", "core", version.toString())
-}
-
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
