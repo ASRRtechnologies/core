@@ -15,7 +15,7 @@ if (!newVersion) {
 let gradleProperties = fs.readFileSync(gradlePropertiesPath, 'utf8');
 
 // Update the version property
-gradleProperties = gradleProperties.replace(/version=.*/, `version=${newVersion}`);
+gradleProperties = gradleProperties.replace(/version\s*=\s*.*/, `version = ${newVersion}`);
 
 // Write the updated gradle.properties back to disk
 fs.writeFileSync(gradlePropertiesPath, gradleProperties, 'utf8');
