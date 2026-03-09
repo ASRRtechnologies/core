@@ -1,3 +1,11 @@
+# ASRR Core Kotlin Package Changelog
+
+## [0.2.5](https://github.com/ASRRtechnologies/core/compare/v0.2.5%0Dv0.2.4#diff) (2026-03-09)
+
+### Bug Fixes
+
+* upgrade gradle to 8.5 and update creds ([a8e5ce8](https://github.com/ASRRtechnologies/core/commits/a8e5ce8e7119cffb1657820dc313dcd2874f5787))
+
 # Core Changelog
 
 ## [0.2.4](https://github.com/ASRRtechnologies/core/compare/v0.2.4%0Dv0.2.3#diff) (2026-03-09)
