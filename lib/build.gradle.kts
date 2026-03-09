@@ -35,11 +35,10 @@ java {
 
 signing {
     // Use in-memory PGP keys
-    useInMemoryPgpKeys(
-        findProperty("signing.keyId")?.toString() ?: System.getenv("GPG_KEY_ID"),
-        findProperty("signing.secretKeyRingFile")?.toString() ?: System.getenv("GPG_PRIVATE_KEY"),
-        findProperty("signing.password")?.toString() ?: System.getenv("GPG_PASSPHRASE")
-    )
+    val password = findProperty("signing.password")?.toString() ?: System.getenv("GPG_PASSPHRASE")
+    val secretKey = findProperty("signing.key")?.toString() ?: System.getenv("GPG_PRIVATE_KEY")
+    
+    useInMemoryPgpKeys(secretKey, password)
     sign(publishing.publications)
 }
 
