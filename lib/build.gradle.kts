@@ -34,12 +34,11 @@ java {
 }
 
 signing {
-    // Use in-memory PGP keys
-    val keyId = findProperty("signing.keyId")?.toString() ?: System.getenv("GPG_KEY_ID")
+    // Use in-memory PGP keys (2-arg version auto-detects key ID from armored key)
     val password = findProperty("signing.password")?.toString() ?: System.getenv("GPG_PASSPHRASE")
     val secretKey = findProperty("signing.key")?.toString() ?: System.getenv("GPG_PRIVATE_KEY")
-    
-    useInMemoryPgpKeys(keyId, secretKey, password)
+
+    useInMemoryPgpKeys(secretKey, password)
     sign(publishing.publications)
 }
 
