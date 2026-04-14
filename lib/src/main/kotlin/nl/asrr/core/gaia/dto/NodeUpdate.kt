@@ -10,5 +10,7 @@ data class NodeUpdate(
     val os: String? = null,
     val usedRam: Long? = null,
     val totalRam: Long? = null,
-    val profile: String? = null
+    val profile: String? = null,
+    val cores: Int? = null,
+    val clockSpeed: Long? = null,
 )

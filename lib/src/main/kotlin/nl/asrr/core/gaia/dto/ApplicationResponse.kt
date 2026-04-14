@@ -20,5 +20,13 @@ data class Node(
     var os: String? = null,
     var usedRam: Long? = null,
     var totalRam: Long? = null,
-    var profile: String? = null
+    var profile: String? = null,
+    var cores: Int? = null,
+    var clockSpeed: Long? = null,
+    var ticks: Ticks = Ticks(0, 0),
+)
+
+data class Ticks(
+    var up: Int,
+    var total: Int,
 )

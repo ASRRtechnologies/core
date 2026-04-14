@@ -33,6 +33,15 @@ class GaiaNodeService(private val creation: CreateApplication) {
             // Don't spam the logs, this breaks on M1 / arm chips
         }
 
+        var cores: Int? = null
+        var clockSpeed: Long? = null
+        try {
+            cores = systemInfo.hardware.processor.logicalProcessorCount
+            clockSpeed = systemInfo.hardware.processor.maxFreq
+        } catch (e: Exception) {
+            // Tolerate hardware probes failing on unusual platforms
+        }
+
         return NodeUpdate(
             creation.company,
             creation.project,
@@ -43,7 +52,9 @@ class GaiaNodeService(private val creation: CreateApplication) {
             "${systemInfo.operatingSystem.family} ${systemInfo.operatingSystem.versionInfo.version}",
             totalRam - available,
             totalRam,
-            creation.profile
+            creation.profile,
+            cores,
+            clockSpeed,
         )
     }
 
