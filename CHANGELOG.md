@@ -1,5 +1,11 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.0.1](https://github.com/ASRRtechnologies/core/compare/v1.0.1%0Dv1.0.0#diff) (2026-04-14)
+
+### Bug Fixes
+
+* **build:** add versionMapping so resolved dep versions land in published pom ([8bdef91](https://github.com/ASRRtechnologies/core/commits/8bdef919f228d94bbda9fa39b76ace75a6a22c8a))
+
 ## [1.0.0](https://github.com/ASRRtechnologies/core/compare/v1.0.0%0Dv0.2.6#diff) (2026-04-14)
 
 ### ⚠ BREAKING CHANGES
