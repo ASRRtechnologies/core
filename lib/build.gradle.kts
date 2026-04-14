@@ -1,13 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    // Apply the org.springframework.boot Plugin to add support for Spring Boot.
-    id("org.springframework.boot") version "3.0.5"
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
+    id("org.springframework.boot") version "3.4.4"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("org.jetbrains.kotlin.jvm") version "2.1.20"
+    kotlin("plugin.spring") version "2.1.20"
 
-    // Apply the java-library plugin for API and implementation separation.
     `java-library`
     `maven-publish`
     signing
@@ -25,7 +23,6 @@ application {
     mainClass.set("nl.asrr.core.Library")
 }
 
-val springBootDependencyVersion = "3.0.5"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 java {
@@ -81,50 +78,35 @@ publishing {
     }
 }
 
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
-    implementation("com.github.oshi:oshi-core:6.3.2")
+    implementation("com.github.oshi:oshi-core:6.6.5")
 
-    // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-
-    // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation("com.google.guava:guava:30.0-jre")
+    implementation("com.google.guava:guava:33.4.0-jre")
 
-    // Spring Boot
-    implementation("org.springframework.boot:spring-boot-starter:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter-web:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter-security:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter-validation:$springBootDependencyVersion")
-    implementation("org.springframework.boot:spring-boot-starter-test:$springBootDependencyVersion")
+    // Spring Boot (versions managed by the Spring Boot BOM via the dependency-management plugin)
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
-    // Json web tokens for authentication
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    // JWT — modern jjwt API. impl/jackson modules are runtime-only.
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
-    // Lombok
-    implementation("org.projectlombok:lombok:1.18.22")
+    // Kotlin Logging — new coordinates as of v3+
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 
-    // Kotlin Logger
-    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
-
-    // User mockK
-    testImplementation("com.ninja-squad:springmockk:3.0.1")
-
-    // Use the Kotlin test library.
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
     api("org.apache.commons:commons-math3:3.6.1")
 }
 
@@ -134,6 +116,10 @@ tasks.jar {
             "Implementation-Version" to project.version))
     }
 }
+
+// This is a library, not an app: don't produce/require a Spring Boot fat jar.
+tasks.named("bootJar") { enabled = false }
+tasks.named("jar") { enabled = true }
 
 tasks.jacocoTestReport {
     reports {

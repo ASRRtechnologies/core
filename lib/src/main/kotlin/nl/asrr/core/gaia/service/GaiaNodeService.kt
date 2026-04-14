@@ -1,6 +1,6 @@
 package nl.asrr.core.gaia.service
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.asrr.core.gaia.communicator.GaiaRestCommunicator
 import nl.asrr.core.gaia.dto.CreateApplication
 import nl.asrr.core.gaia.dto.NodeUpdate
