@@ -1,5 +1,15 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.1.0](https://github.com/ASRRtechnologies/core/compare/v1.1.0%0Dv1.0.1#diff) (2026-04-14)
+
+### Features
+
+* **gaia:** sync dtos with backend and report cpu info ([7777633](https://github.com/ASRRtechnologies/core/commits/7777633f7af671769428d99a26757ffd25c622de))
+
+### Bug Fixes
+
+* **ci:** bump CI JDK to 21 to match project toolchain ([24d63bf](https://github.com/ASRRtechnologies/core/commits/24d63bf4052520c2b75522a0be1bb335f97e9f10))
+
 ## [1.0.1](https://github.com/ASRRtechnologies/core/compare/v1.0.1%0Dv1.0.0#diff) (2026-04-14)
 
 ### Bug Fixes
