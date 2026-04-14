@@ -46,6 +46,13 @@ publishing {
 
             from(components["java"])
 
+            // Write resolved versions into the published pom so Maven Central
+            // validation passes (BOM-managed deps otherwise lack versions).
+            versionMapping {
+                usage("java-api") { fromResolutionOf("runtimeClasspath") }
+                usage("java-runtime") { fromResolutionResult() }
+            }
+
             pom {
                 name.set("ASRR Core Kotlin Library")
                 description.set("A library for all common ASRR code")
