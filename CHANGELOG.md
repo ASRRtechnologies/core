@@ -1,5 +1,11 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.2.0](https://github.com/ASRRtechnologies/core/compare/v1.2.0%0Dv1.1.0#diff) (2026-04-14)
+
+### Features
+
+* **gaia:** auto-configured scheduler and optional version reporting ([6510b2f](https://github.com/ASRRtechnologies/core/commits/6510b2f8564db70733f8ec4e93cbc2036b69ec2f))
+
 ## [1.1.0](https://github.com/ASRRtechnologies/core/compare/v1.1.0%0Dv1.0.1#diff) (2026-04-14)
 
 ### Features
