@@ -1,5 +1,17 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.0.0](https://github.com/ASRRtechnologies/core/compare/v1.0.0%0Dv0.2.6#diff) (2026-04-14)
+
+### ⚠ BREAKING CHANGES
+
+* Consumers must be on Spring Boot 3.4 / Kotlin 2.1 / JDK 17+.
+The jjwt secret must now be at least 64 bytes for HS512. The kotlin-logging
+import changed from mu.KotlinLogging to io.github.oshai.kotlinlogging.KotlinLogging.
+
+### Features
+
+* upgrade core stack and add ProblemDetail handler + PageResponse ([1e51a5a](https://github.com/ASRRtechnologies/core/commits/1e51a5a902b1f76485a44130e753d0fede350d2e))
+
 ## [0.2.6](https://github.com/ASRRtechnologies/core/compare/v0.2.6%0Dv0.2.5#diff) (2026-03-09)
 
 ### Bug Fixes
