@@ -13,4 +13,5 @@ data class NodeUpdate(
     val profile: String? = null,
     val cores: Int? = null,
     val clockSpeed: Long? = null,
+    val version: String? = null,
 )

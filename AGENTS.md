@@ -10,6 +10,10 @@ Consumed as a Maven Central artifact: `nl.asrr:core`.
   Drop-in authentication for Spring Boot services.
 - **gaia/** — Node/cluster reporting: communicator + service for reporting
   node info (including CPU) to a Gaia backend. DTOs are synced with backend.
+  Includes a Spring Boot auto-configured `GaiaScheduler`: set `gaia.enabled=true`
+  and `gaia.name=<app-identifier>` and a bean is registered that pings Gaia on
+  a fixed interval (`gaia.interval-ms`, default 10s). No boilerplate scheduler
+  needed in the consumer.
 - **generics/** — Generic CRUD stack (controller + service + repository + DTO
   + model) to scaffold REST resources with minimal boilerplate.
 - **exceptions/** — `GlobalExceptionHandler` (Spring `ProblemDetail`-based),

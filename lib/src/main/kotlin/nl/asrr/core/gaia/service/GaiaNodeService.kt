@@ -9,7 +9,7 @@ import oshi.hardware.CentralProcessor
 import oshi.hardware.ComputerSystem
 import oshi.hardware.HardwareAbstractionLayer
 
-class GaiaNodeService(private val creation: CreateApplication) {
+class GaiaNodeService(private val creation: CreateApplication, private val version: String? = null) {
     private val log = KotlinLogging.logger {}
     private val communicator = GaiaRestCommunicator()
     private val systemInfo = SystemInfo()
@@ -55,6 +55,7 @@ class GaiaNodeService(private val creation: CreateApplication) {
             creation.profile,
             cores,
             clockSpeed,
+            version,
         )
     }
 
