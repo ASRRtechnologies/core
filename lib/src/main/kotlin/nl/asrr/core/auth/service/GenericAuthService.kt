@@ -46,6 +46,7 @@ abstract class GenericAuthService<T : BasicUser>(
     @Suppress("UNCHECKED_CAST")
     fun logout(refreshToken: String): ResponseEntity<Void> {
         val authentication = SecurityContextHolder.getContext().authentication
+            ?: return ResponseEntity<Void>(HttpStatus.UNAUTHORIZED)
         val user = authentication.principal as T
         try {
             refreshTokenService.deleteRefreshTokenForUser(user.username, refreshToken)

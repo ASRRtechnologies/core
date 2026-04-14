@@ -1,10 +1,11 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    id("org.springframework.boot") version "3.4.4"
+    id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    kotlin("plugin.spring") version "2.1.20"
+    id("org.jetbrains.kotlin.jvm") version "2.2.21"
+    kotlin("plugin.spring") version "2.2.21"
 
     `java-library`
     `maven-publish`
@@ -23,7 +24,7 @@ application {
     mainClass.set("nl.asrr.core.Library")
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 java {
     withJavadocJar()
@@ -86,7 +87,7 @@ publishing {
 }
 
 dependencies {
-    implementation("com.github.oshi:oshi-core:6.6.5")
+    implementation("com.github.oshi:oshi-core:6.8.2")
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -100,7 +101,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1")
 
     // JWT — modern jjwt API. impl/jackson modules are runtime-only.
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
@@ -108,7 +109,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     // Kotlin Logging — new coordinates as of v3+
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.14")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
@@ -135,10 +136,10 @@ tasks.jacocoTestReport {
     }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjsr305=strict")
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
 

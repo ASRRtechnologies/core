@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page
  * Stable JSON shape for paginated responses. Avoids leaking Spring `Page` internals
  * (e.g. `pageable`, `sort`) which are unstable across Spring releases and verbose to consume.
  */
-data class PageResponse<T>(
+data class PageResponse<T : Any>(
     val items: List<T>,
     val page: Int,
     val size: Int,
@@ -16,7 +16,7 @@ data class PageResponse<T>(
     val last: Boolean,
 )
 
-fun <T> Page<T>.toResponse(): PageResponse<T> = PageResponse(
+fun <T : Any> Page<T>.toResponse(): PageResponse<T> = PageResponse(
     items = content,
     page = number,
     size = size,

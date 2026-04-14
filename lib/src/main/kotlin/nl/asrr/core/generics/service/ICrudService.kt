@@ -24,11 +24,11 @@ import java.time.ZonedDateTime
 /**
  * Generic service for CRUD operations
  */
-abstract class ICrudService<T : ICrudEntity>(
+abstract class ICrudService<T>(
     open val repository: ICrudRepository<T>,
     open val mongoTemplate: MongoTemplate,
     open val securityService: ISecurityService
-) {
+) where T : ICrudEntity, T : Any {
 
     open fun save(entity: T): T {
         entity.updated = ZonedDateTime.now()
@@ -71,7 +71,7 @@ abstract class ICrudService<T : ICrudEntity>(
         return repository.findAllBy(criteria, pageable)
     }
 
-    inline fun <reified T> search(
+    inline fun <reified T : Any> search(
         search: IEntitySearch,
         pageNumber: Int,
         pageSize: Int
@@ -93,7 +93,7 @@ abstract class ICrudService<T : ICrudEntity>(
         return PageImpl(page.pageList, pageable, totalItems.size.toLong())
     }
 
-    inline fun <reified T> search(
+    inline fun <reified T : Any> search(
         search: IEntitySearch,
         pageNumber: Int,
         pageSize: Int,
@@ -106,18 +106,19 @@ abstract class ICrudService<T : ICrudEntity>(
             .withIgnoreNullValues()
 
         val example = Example.of(search, matcher)
-        val sort = Sort.by(direction ?: Sort.DEFAULT_DIRECTION, sortBy)
 
-        val query = sortBy?.let { Query(Criteria().alike(example)).with(sort) }
-            ?: Query(Criteria().alike(example))
+        val query = sortBy?.let {
+            Query(Criteria().alike(example)).with(Sort.by(direction ?: Sort.DEFAULT_DIRECTION, it))
+        } ?: Query(Criteria().alike(example))
         val totalItems = mongoTemplate.find(query, T::class.java)
 
         val page = PagedListHolder(totalItems)
         page.page = pageNumber
         page.pageSize = pageSize
 
-        val pageable = sortBy?.let { PageRequest.of(pageNumber, pageSize, sort) }
-            ?:  PageRequest.of(pageNumber, pageSize)
+        val pageable = sortBy?.let {
+            PageRequest.of(pageNumber, pageSize, Sort.by(direction ?: Sort.DEFAULT_DIRECTION, it))
+        } ?: PageRequest.of(pageNumber, pageSize)
         return PageImpl(page.pageList, pageable, totalItems.size.toLong())
     }
 
