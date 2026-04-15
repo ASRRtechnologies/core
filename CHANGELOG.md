@@ -1,5 +1,11 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.2.1](https://github.com/ASRRtechnologies/core/compare/v1.2.1%0Dv1.2.0#diff) (2026-04-15)
+
+### Bug Fixes
+
+* **gaia:** catch Throwable so OSHI/JNA NoClassDefFoundError doesn't kill the scheduler ([42d5a0d](https://github.com/ASRRtechnologies/core/commits/42d5a0d9c505924514a209a2629b4879fb059dc8))
+
 ## [1.2.0](https://github.com/ASRRtechnologies/core/compare/v1.2.0%0Dv1.1.0#diff) (2026-04-14)
 
 ### Features
