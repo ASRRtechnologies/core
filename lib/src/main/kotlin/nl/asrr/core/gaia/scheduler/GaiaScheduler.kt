@@ -30,7 +30,7 @@ open class GaiaScheduler(
     fun update() {
         try {
             service.updateNode()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             log.debug(e) { "GAIA node update failed" }
         }
     }

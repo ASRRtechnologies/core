@@ -29,7 +29,7 @@ class GaiaNodeService(private val creation: CreateApplication, private val versi
         try {
             totalRam = systemInfo.hardware.memory.total
             available = systemInfo.hardware.memory.available
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             // Don't spam the logs, this breaks on M1 / arm chips
         }
 
@@ -38,7 +38,7 @@ class GaiaNodeService(private val creation: CreateApplication, private val versi
         try {
             cores = systemInfo.hardware.processor.logicalProcessorCount
             clockSpeed = systemInfo.hardware.processor.maxFreq
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             // Tolerate hardware probes failing on unusual platforms
         }
 
