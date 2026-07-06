@@ -16,5 +16,12 @@ data class RefreshToken(
     val token: String,
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    val expires: LocalDateTime
+    val expires: LocalDateTime,
+
+    /**
+     * Set when this token has been rotated: points at the replacement token.
+     * Within the rotation grace window the old token may be presented again
+     * (client lost the rotation response) and receives the same replacement.
+     */
+    val replacedByToken: String? = null
 )

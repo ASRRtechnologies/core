@@ -23,7 +23,9 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
     private val jwtTokenUtil: JwtTokenUtil,
     private val idGenerator: IdGenerator,
     @Value("\${auth.jwt.refresh-expiration-hrs}")
-    private val expirationHrs: Long
+    private val expirationHrs: Long,
+    @Value("\${auth.jwt.refresh-rotation-grace-seconds:60}")
+    private val rotationGraceSeconds: Long = 60
 ) {
     fun generateRefreshToken(user: BasicUser): RefreshToken {
         val token = UUID.randomUUID().toString()
@@ -45,9 +47,43 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
 
         val user = userRepository.findByUsername(refreshToken.username)
             ?: throw NotFoundException("User '${refreshToken.username}' does not exist")
+
+        // Idempotent retry within the rotation grace window: a client that lost
+        // the rotation response (e.g. mobile app killed mid-refresh) can present
+        // the old token again and receives the same replacement instead of being
+        // logged out. The old token's shortened expiry bounds the window.
+        refreshToken.replacedByToken?.let { replacement ->
+            val replacementToken = refreshTokenRepository.findByToken(replacement)
+                ?: throw ExpiredRefreshTokenException("Refresh token '$token' has been consumed, please login again")
+            if (isExpired(replacementToken))
+                throw ExpiredRefreshTokenException("Refresh token '$token' has expired, please login again")
+            val (accessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user)
+            return ResponseEntity(
+                AuthResponse(
+                    idGenerator.generate(),
+                    user.username,
+                    accessToken,
+                    replacementToken.token,
+                    accessExpires
+                ),
+                HttpStatus.OK
+            )
+        }
+
         val (newAccessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user)
         val newRefreshToken = generateRefreshToken(user)
-        refreshTokenRepository.delete(refreshToken)
+        val now = LocalDateTime.now(ZoneId.of("Europe/Amsterdam"))
+        // Rotate with a grace window instead of a hard delete: keep the old token
+        // briefly, pointing at its replacement, so a lost response is recoverable.
+        refreshTokenRepository.save(
+            refreshToken.copy(
+                expires = now.plusSeconds(rotationGraceSeconds),
+                replacedByToken = newRefreshToken.token
+            )
+        )
+        // Rotation no longer deletes the old token, so sweep this user's expired
+        // ones here to keep the collection from accumulating
+        refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(user.username, now)
 
         return ResponseEntity(
             AuthResponse(

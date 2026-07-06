@@ -63,8 +63,8 @@ class RefreshTokenServiceTest {
         val refreshToken = RefreshToken("123", "username", "token", LocalDateTime.MAX)
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
         every { refreshTokenRepository.findByToken(any()) } returns refreshToken
-        every { refreshTokenRepository.save(any()) } returns refreshToken
-        every { refreshTokenRepository.delete(any()) } returns Unit
+        every { refreshTokenRepository.save(any()) } answers { firstArg() }
+        every { refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(any(), any()) } returns Unit
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
@@ -75,6 +75,89 @@ class RefreshTokenServiceTest {
         val response = refreshTokenService.refresh("token").body
 
         assertEquals(user.username, response!!.username)
+    }
+
+    @Test
+    fun `refresh keeps rotated token usable within grace window and marks replacement`() {
+        val refreshToken = RefreshToken("123", "username", "token", LocalDateTime.MAX)
+        val refreshTokenRepository = mockk<IRefreshTokenRepository>()
+        val saved = mutableListOf<RefreshToken>()
+        every { refreshTokenRepository.findByToken("token") } returns refreshToken
+        every { refreshTokenRepository.save(capture(saved)) } answers { firstArg() }
+        every { refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(any(), any()) } returns Unit
+
+        val user = AuthUtil.createUser()
+        val userRepository = mockk<IBasicUserRepository>()
+        every { userRepository.findByUsername(any()) } returns user
+
+        val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
+        val response = service.refresh("token").body!!
+
+        // The old token doc is kept, points at the replacement, and only lives for the grace window
+        val rotated = saved.first { it.id == "123" }
+        assertEquals(response.refreshToken, rotated.replacedByToken)
+        Assertions.assertTrue(rotated.expires.isBefore(LocalDateTime.now().plusMinutes(5)))
+    }
+
+    @Test
+    fun `refresh with rotated token inside grace returns the same replacement`() {
+        val replacement = RefreshToken("456", "username", "new-token", LocalDateTime.MAX)
+        val rotated = RefreshToken(
+            "123", "username", "token",
+            LocalDateTime.now().plusSeconds(30),
+            replacedByToken = "new-token"
+        )
+        val refreshTokenRepository = mockk<IRefreshTokenRepository>()
+        every { refreshTokenRepository.findByToken("token") } returns rotated
+        every { refreshTokenRepository.findByToken("new-token") } returns replacement
+
+        val user = AuthUtil.createUser()
+        val userRepository = mockk<IBasicUserRepository>()
+        every { userRepository.findByUsername(any()) } returns user
+
+        val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
+        val response = service.refresh("token").body!!
+
+        assertEquals("new-token", response.refreshToken)
+    }
+
+    @Test
+    fun `refresh with rotated token after grace throws expired`() {
+        val rotated = RefreshToken(
+            "123", "username", "token",
+            LocalDateTime.now().minusSeconds(1),
+            replacedByToken = "new-token"
+        )
+        val refreshTokenRepository = mockk<IRefreshTokenRepository>()
+        every { refreshTokenRepository.findByToken("token") } returns rotated
+
+        val service = createService(refreshTokenRepository = refreshTokenRepository)
+
+        Assertions.assertThrows(ExpiredRefreshTokenException::class.java) {
+            service.refresh("token")
+        }
+    }
+
+    @Test
+    fun `refresh with rotated token whose replacement is gone throws expired`() {
+        val rotated = RefreshToken(
+            "123", "username", "token",
+            LocalDateTime.now().plusSeconds(30),
+            replacedByToken = "new-token"
+        )
+        val refreshTokenRepository = mockk<IRefreshTokenRepository>()
+        every { refreshTokenRepository.findByToken("token") } returns rotated
+        every { refreshTokenRepository.findByToken("new-token") } returns null
+
+        val user = AuthUtil.createUser()
+        val userRepository = mockk<IBasicUserRepository>()
+        every { userRepository.findByUsername(any()) } returns user
+
+        val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
+
+        Assertions.assertThrows(ExpiredRefreshTokenException::class.java) {
+            service.refresh("token")
+        }
     }
 
     private fun createService(
