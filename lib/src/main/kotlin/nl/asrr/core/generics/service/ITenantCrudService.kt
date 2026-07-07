@@ -5,10 +5,14 @@ import nl.asrr.core.auth.service.ISecurityService
 import nl.asrr.core.exceptions.NotFoundException
 import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
+import nl.asrr.core.generics.search.FreeTextSearch
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.TextCriteria
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Criteria.where
+import org.springframework.data.mongodb.core.query.Query
 
 abstract class ITenantCrudService<T : ITenantCrudEntity>(
     override val repository: ITenantCrudRepository<T>,
@@ -32,9 +36,21 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
             return repository.findAllByTenantId(tenantId, pageable)
         }
 
-        val criteria = TextCriteria().matchingAny(search)
+        // A $text query (TextCriteria) requires a collection text index; entities that declare none
+        // fail with Mongo error 27 → HTTP 500 on any search. Match with a per-field regex instead
+        // (see FreeTextSearch), which needs no index. Fall back to the unfiltered tenant page when the
+        // entity type can't be resolved or has no searchable field — never a 500.
+        val entityClass = resolvedEntityClass
+        val searchCriteria = entityClass?.let { FreeTextSearch.criteria(search, it) }
+            ?: return repository.findAllByTenantId(tenantId, pageable)
 
-        return repository.findAllByTenantId(tenantId, criteria, pageable)
+        val query = Query(Criteria().andOperator(where("tenantId").`is`(tenantId), searchCriteria))
+        val total = mongoTemplate.count(Query.of(query), entityClass)
+        query.with(pageable)
+
+        @Suppress("UNCHECKED_CAST")
+        val content = mongoTemplate.find(query, entityClass) as List<T>
+        return PageImpl(content, pageable, total)
     }
 
     override fun findAll(): List<T> {

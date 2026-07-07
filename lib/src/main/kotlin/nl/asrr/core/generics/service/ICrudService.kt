@@ -6,7 +6,9 @@ import nl.asrr.core.exceptions.NotFoundException
 import nl.asrr.core.generics.model.ICrudEntity
 import nl.asrr.core.generics.model.IEntitySearch
 import nl.asrr.core.generics.repository.ICrudRepository
+import nl.asrr.core.generics.search.FreeTextSearch
 import org.springframework.beans.support.PagedListHolder
+import org.springframework.core.GenericTypeResolver
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.Page
@@ -17,7 +19,6 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.data.mongodb.core.query.UntypedExampleMatcher
 import java.time.ZonedDateTime
 
@@ -66,9 +67,26 @@ abstract class ICrudService<T>(
             return repository.findAll(pageable)
         }
 
-        val criteria = TextCriteria().matchingAny(search)
+        // A $text query (TextCriteria) requires a collection text index; entities that declare none
+        // fail with Mongo error 27 → HTTP 500 on any search. Match with a per-field regex instead
+        // (see FreeTextSearch), which needs no index. Fall back to the unfiltered page when the entity
+        // type can't be resolved or has no searchable field — never a 500.
+        val entityClass = resolvedEntityClass
+        val searchCriteria = entityClass?.let { FreeTextSearch.criteria(search, it) }
+            ?: return repository.findAll(pageable)
 
-        return repository.findAllBy(criteria, pageable)
+        val query = Query(searchCriteria)
+        val total = mongoTemplate.count(Query.of(query), entityClass)
+        query.with(pageable)
+
+        @Suppress("UNCHECKED_CAST")
+        val content = mongoTemplate.find(query, entityClass) as List<T>
+        return PageImpl(content, pageable, total)
+    }
+
+    /** The concrete entity type behind `T`, resolved once per instance (null if it can't be inferred). */
+    protected val resolvedEntityClass: Class<*>? by lazy {
+        GenericTypeResolver.resolveTypeArgument(javaClass, ICrudService::class.java)
     }
 
     inline fun <reified T : Any> search(
