@@ -14,10 +14,16 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RefreshTokenServiceTest {
+
+    // The service compares token expiry against LocalDateTime.now(Europe/Amsterdam) (a deliberate
+    // fixed zone, self-consistent in prod). Tests must build relative expiry timestamps in that same
+    // zone, else they fail on non-Amsterdam machines (CI runs UTC → service "now" is +hours ahead).
+    private val ams = ZoneId.of("Europe/Amsterdam")
 
     @Test
     fun `generateRefreshToken returns refresh token for given user`() {
@@ -96,7 +102,7 @@ class RefreshTokenServiceTest {
         // The old token doc is kept, points at the replacement, and only lives for the grace window
         val rotated = saved.first { it.id == "123" }
         assertEquals(response.refreshToken, rotated.replacedByToken)
-        Assertions.assertTrue(rotated.expires.isBefore(LocalDateTime.now().plusMinutes(5)))
+        Assertions.assertTrue(rotated.expires.isBefore(LocalDateTime.now(ams).plusMinutes(5)))
     }
 
     @Test
@@ -104,7 +110,7 @@ class RefreshTokenServiceTest {
         val replacement = RefreshToken("456", "username", "new-token", LocalDateTime.MAX)
         val rotated = RefreshToken(
             "123", "username", "token",
-            LocalDateTime.now().plusSeconds(30),
+            LocalDateTime.now(ams).plusSeconds(30),
             replacedByToken = "new-token"
         )
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
@@ -125,7 +131,7 @@ class RefreshTokenServiceTest {
     fun `refresh with rotated token after grace throws expired`() {
         val rotated = RefreshToken(
             "123", "username", "token",
-            LocalDateTime.now().minusSeconds(1),
+            LocalDateTime.now(ams).minusSeconds(1),
             replacedByToken = "new-token"
         )
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
@@ -142,7 +148,7 @@ class RefreshTokenServiceTest {
     fun `refresh with rotated token whose replacement is gone throws expired`() {
         val rotated = RefreshToken(
             "123", "username", "token",
-            LocalDateTime.now().plusSeconds(30),
+            LocalDateTime.now(ams).plusSeconds(30),
             replacedByToken = "new-token"
         )
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
