@@ -1,11 +1,7 @@
 package nl.asrr.core.auth.jwt
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.MalformedJwtException
-import io.jsonwebtoken.UnsupportedJwtException
+import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
 import nl.asrr.core.auth.exception.InvalidJwtException
@@ -13,7 +9,7 @@ import nl.asrr.core.auth.model.BasicUser
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
-import java.util.Date
+import java.util.*
 import javax.crypto.SecretKey
 
 @Component
@@ -39,12 +35,13 @@ class JwtTokenUtil {
         Keys.hmacShaKeyFor(bytes)
     }
 
-    fun generateAccessToken(user: BasicUser): Pair<String, Long> {
+    fun generateAccessToken(user: BasicUser, claims: Map<String, String> = mapOf()): Pair<String, Long> {
         val expirationDate = Date(System.currentTimeMillis() + expirationMs)
 
         val token = Jwts.builder()
             .subject("${user.id},${user.username}")
             .claim("roles", user.roles)
+            .claims(claims)
             .issuer(issuer ?: throw InvalidJwtException("JWT issuer cannot be null"))
             .issuedAt(Date())
             .expiration(expirationDate)
