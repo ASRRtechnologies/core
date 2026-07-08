@@ -1,6 +1,7 @@
 package nl.asrr.core.auth.jwt
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
@@ -75,7 +76,7 @@ class JwtTokenUtil {
         return false
     }
 
-    private fun parseClaims(token: String) =
+    fun parseClaims(token: String): Claims =
         Jwts.parser()
             .verifyWith(signingKey)
             .build()
