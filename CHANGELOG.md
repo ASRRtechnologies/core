@@ -1,5 +1,7 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.3.0](https://github.com/ASRRtechnologies/core/compare/v1.2.2...v1.3.0) (2026-07-08)
+
 ## [1.2.2](https://github.com/ASRRtechnologies/core/compare/v1.2.1...v1.2.2) (2026-07-07)
 
 ## [1.2.1](https://github.com/ASRRtechnologies/core/compare/v1.2.1%0Dv1.2.0#diff) (2026-04-15)
