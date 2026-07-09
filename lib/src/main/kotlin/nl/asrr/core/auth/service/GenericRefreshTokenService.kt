@@ -45,7 +45,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         if (isExpired(refreshToken))
             throw ExpiredRefreshTokenException("Refresh token '$token' has expired, please login again")
 
-        val user = userRepository.findByUsername(refreshToken.username)
+        val user = userRepository.findByUsernameIgnoreCase(refreshToken.username)
             ?: throw NotFoundException("User '${refreshToken.username}' does not exist")
 
         // Idempotent retry within the rotation grace window: a client that lost
@@ -83,7 +83,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         )
         // Rotation no longer deletes the old token, so sweep this user's expired
         // ones here to keep the collection from accumulating
-        refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(user.username, now)
+        refreshTokenRepository.deleteAllByUsernameIgnoreCaseAndExpiresBefore(user.username, now)
 
         return ResponseEntity(
             AuthResponse(
@@ -103,14 +103,14 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
 
     fun deleteRefreshTokenForUser(username: String, token: String) {
         val refreshToken = find(token)
-        if (refreshToken.username != username)
+        if (!refreshToken.username.equals(username, ignoreCase = true))
             throw UnexpectedUserException("The current user does not match the user linked to the refresh token")
         refreshTokenRepository.delete(refreshToken)
     }
 
     // can be used for something like a "sign out from all devices" method
     fun deleteAllRefreshTokensForUser(username: String) {
-        refreshTokenRepository.deleteAllByUsername(username)
+        refreshTokenRepository.deleteAllByUsernameIgnoreCase(username)
     }
 
     private fun find(token: String): RefreshToken {

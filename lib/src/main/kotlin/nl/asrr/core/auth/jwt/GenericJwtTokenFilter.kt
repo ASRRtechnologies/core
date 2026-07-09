@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
-import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
 
 abstract class GenericJwtTokenFilter<T : BasicUser>(
@@ -40,7 +39,7 @@ abstract class GenericJwtTokenFilter<T : BasicUser>(
 
         // get user identity and set it on the spring security context
         val username = jwtTokenUtil.parseUsername(token)
-        val user = userRepository.findByUsername(username) ?: throw NotFoundException("User '$username' does not exist")
+        val user = userRepository.findByUsernameIgnoreCase(username) ?: throw NotFoundException("User '$username' does not exist")
         val auth = UsernamePasswordAuthenticationToken(user, null, user.authorities)
         auth.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = auth

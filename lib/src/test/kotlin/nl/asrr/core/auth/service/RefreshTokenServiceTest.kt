@@ -70,11 +70,11 @@ class RefreshTokenServiceTest {
         val refreshTokenRepository = mockk<IRefreshTokenRepository>()
         every { refreshTokenRepository.findByToken(any()) } returns refreshToken
         every { refreshTokenRepository.save(any()) } answers { firstArg() }
-        every { refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(any(), any()) } returns Unit
+        every { refreshTokenRepository.deleteAllByUsernameIgnoreCaseAndExpiresBefore(any(), any()) } returns Unit
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
-        every { userRepository.findByUsername(any()) } returns user
+        every { userRepository.findByUsernameIgnoreCase(any()) } returns user
 
         val refreshTokenService =
             createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
@@ -90,11 +90,11 @@ class RefreshTokenServiceTest {
         val saved = mutableListOf<RefreshToken>()
         every { refreshTokenRepository.findByToken("token") } returns refreshToken
         every { refreshTokenRepository.save(capture(saved)) } answers { firstArg() }
-        every { refreshTokenRepository.deleteAllByUsernameAndExpiresBefore(any(), any()) } returns Unit
+        every { refreshTokenRepository.deleteAllByUsernameIgnoreCaseAndExpiresBefore(any(), any()) } returns Unit
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
-        every { userRepository.findByUsername(any()) } returns user
+        every { userRepository.findByUsernameIgnoreCase(any()) } returns user
 
         val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
         val response = service.refresh("token").body!!
@@ -119,7 +119,7 @@ class RefreshTokenServiceTest {
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
-        every { userRepository.findByUsername(any()) } returns user
+        every { userRepository.findByUsernameIgnoreCase(any()) } returns user
 
         val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
         val response = service.refresh("token").body!!
@@ -157,7 +157,7 @@ class RefreshTokenServiceTest {
 
         val user = AuthUtil.createUser()
         val userRepository = mockk<IBasicUserRepository>()
-        every { userRepository.findByUsername(any()) } returns user
+        every { userRepository.findByUsernameIgnoreCase(any()) } returns user
 
         val service = createService(refreshTokenRepository = refreshTokenRepository, userRepository = userRepository)
 

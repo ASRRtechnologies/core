@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Repository
 interface IRefreshTokenRepository : MongoRepository<RefreshToken, String> {
     fun findByToken(token: String): RefreshToken?
-    fun deleteAllByUsername(username: String)
-    fun findAllByUsername(username: String): List<RefreshToken>
-    fun deleteAllByUsernameAndExpiresBefore(username: String, expires: LocalDateTime)
+    fun deleteAllByUsernameIgnoreCase(username: String)
+    fun findAllByUsernameIgnoreCase(username: String): List<RefreshToken>
+    fun deleteAllByUsernameIgnoreCaseAndExpiresBefore(username: String, expires: LocalDateTime)
 }

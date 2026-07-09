@@ -9,6 +9,6 @@ import org.springframework.data.repository.NoRepositoryBean
  */
 @NoRepositoryBean
 interface IGenericUserRepository<T : BasicUser> : MongoRepository<T, String> {
-    fun findByUsername(username: String): T?
-    fun deleteByUsername(username: String)
+    fun findByUsernameIgnoreCase(username: String): T?
+    fun deleteByUsernameIgnoreCase(username: String)
 }
