@@ -15,25 +15,31 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.UUID
+import java.util.*
 
 abstract class GenericRefreshTokenService<T : BasicUser>(
     private val refreshTokenRepository: IRefreshTokenRepository,
     private val userRepository: IGenericUserRepository<T>,
     private val jwtTokenUtil: JwtTokenUtil,
     private val idGenerator: IdGenerator,
-    @Value("\${auth.jwt.refresh-expiration-hrs}")
+    @param:Value("\${auth.jwt.refresh-expiration-hrs}")
     private val expirationHrs: Long,
-    @Value("\${auth.jwt.refresh-rotation-grace-seconds:60}")
+    @param:Value("\${auth.jwt.refresh-rotation-grace-seconds:60}")
     private val rotationGraceSeconds: Long = 60
 ) {
-    fun generateRefreshToken(user: BasicUser): RefreshToken {
+    fun generateRefreshToken(
+        user: BasicUser,
+        sessionId: String? = null,
+        claims: Map<String, String> = mapOf()
+    ): RefreshToken {
         val token = UUID.randomUUID().toString()
         val refreshToken = RefreshToken(
             idGenerator.generate(),
             user.username,
             token,
-            LocalDateTime.now(ZoneId.of("Europe/Amsterdam")).plusHours(expirationHrs)
+            LocalDateTime.now(ZoneId.of("Europe/Amsterdam")).plusHours(expirationHrs),
+            sessionId = sessionId,
+            claims = claims
         )
 
         refreshTokenRepository.save(refreshToken)
@@ -57,7 +63,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
                 ?: throw ExpiredRefreshTokenException("Refresh token '$token' has been consumed, please login again")
             if (isExpired(replacementToken))
                 throw ExpiredRefreshTokenException("Refresh token '$token' has expired, please login again")
-            val (accessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user)
+            val (accessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user, refreshToken.claims)
             return ResponseEntity(
                 AuthResponse(
                     idGenerator.generate(),
@@ -70,8 +76,8 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
             )
         }
 
-        val (newAccessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user)
-        val newRefreshToken = generateRefreshToken(user)
+        val (newAccessToken, accessExpires) = jwtTokenUtil.generateAccessToken(user, refreshToken.claims)
+        val newRefreshToken = generateRefreshToken(user, refreshToken.sessionId, refreshToken.claims)
         val now = LocalDateTime.now(ZoneId.of("Europe/Amsterdam"))
         // Rotate with a grace window instead of a hard delete: keep the old token
         // briefly, pointing at its replacement, so a lost response is recoverable.
@@ -113,7 +119,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         refreshTokenRepository.deleteAllByUsernameIgnoreCase(username)
     }
 
-    private fun find(token: String): RefreshToken {
+    fun find(token: String): RefreshToken {
         return refreshTokenRepository.findByToken(token)
             ?: throw NotFoundException("Refresh token '$token' does not exist")
     }

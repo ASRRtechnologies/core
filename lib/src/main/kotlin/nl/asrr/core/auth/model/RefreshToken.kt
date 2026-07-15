@@ -23,5 +23,7 @@ data class RefreshToken(
      * Within the rotation grace window the old token may be presented again
      * (client lost the rotation response) and receives the same replacement.
      */
-    val replacedByToken: String? = null
+    val replacedByToken: String? = null,
+    val sessionId: String? = null,
+    val claims: Map<String, String> = mapOf()
 )
