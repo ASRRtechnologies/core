@@ -27,7 +27,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
     @param:Value("\${auth.jwt.refresh-rotation-grace-seconds:60}")
     private val rotationGraceSeconds: Long = 60
 ) {
-    fun generateRefreshToken(
+    open fun generateRefreshToken(
         user: BasicUser,
         sessionId: String? = null,
         claims: Map<String, String> = mapOf()
@@ -46,7 +46,7 @@ abstract class GenericRefreshTokenService<T : BasicUser>(
         return refreshToken
     }
 
-    fun refresh(token: String): ResponseEntity<AuthResponse> {
+    open fun refresh(token: String): ResponseEntity<AuthResponse> {
         val refreshToken = find(token)
         if (isExpired(refreshToken))
             throw ExpiredRefreshTokenException("Refresh token '$token' has expired, please login again")
