@@ -1,5 +1,17 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.6.0](https://github.com/ASRRtechnologies/core/compare/v1.6.0%0Dv1.5.0#diff) (2026-10-27)
+
+### Features
+
+* **monitoring:** optional user e-mail on Sentry events ([a2e8126](https://github.com/ASRRtechnologies/core/commits/a2e81262539028387a452c79be113c519b3a290e))
+* **testing:** baseline for is-boolean JSON names ([ff7f227](https://github.com/ASRRtechnologies/core/commits/ff7f227e0a9e0f07c091d09c8da66acb365d3d3d))
+* **text:** parentDomain ([eb19b28](https://github.com/ASRRtechnologies/core/commits/eb19b28af8fde9940ec1c3f35a6f340ce10996ea))
+
+### Bug Fixes
+
+* **testing:** publish the test fixtures as nl.asrr:core-test-fixtures ([5ec80e3](https://github.com/ASRRtechnologies/core/commits/5ec80e3c5a05469ea0893e2debf99f3f8c73ccc5)), closes [core-test-fixtures](https://asrrtechnologies.atlassian.net/browse/core-test-fixtures)
+
 ## [1.5.0](https://github.com/ASRRtechnologies/core/compare/v1.5.0%0Dv1.4.1#diff) (2026-10-27)
 
 ### Features
