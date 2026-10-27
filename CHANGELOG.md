@@ -1,5 +1,22 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.5.0](https://github.com/ASRRtechnologies/core/compare/v1.5.0%0Dv1.4.1#diff) (2026-10-27)
+
+### Features
+
+* **audit:** audit log entry, BSON diff and batched writer ([8a2bd1f](https://github.com/ASRRtechnologies/core/commits/8a2bd1f662cd8bdf5a3931802da099e77fe1d325))
+* **auth:** session revocation across pods and the API key format ([3059d38](https://github.com/ASRRtechnologies/core/commits/3059d38b0271d176373d566ccb59ae8ae6aba0aa))
+* **exceptions:** reserve 500 for real faults ([d7ca9e4](https://github.com/ASRRtechnologies/core/commits/d7ca9e417fc7cfd6ca82c05b7994b91fd34e0670))
+* **generics:** dynamic search and CSV export for tenant CRUD ([080ee8f](https://github.com/ASRRtechnologies/core/commits/080ee8f0be3ad3effea3f677717411122e671c6d))
+* **monitoring:** Sentry bootstrap, request context, tracing and cron monitors ([50b4457](https://github.com/ASRRtechnologies/core/commits/50b44577c3c7d173b369eec17af23daed4f42d40))
+* **ops:** MigrationLog, LogThrottle, RunsOnEveryInstance and log helpers ([b6fa7a1](https://github.com/ASRRtechnologies/core/commits/b6fa7a10ea1abe38a6ea64b126df9d36863a6385))
+* **security:** field encryption, SSRF check, rate limiting, Turnstile and text helpers ([413b13e](https://github.com/ASRRtechnologies/core/commits/413b13e66a25679714185236a26b396bf889bb87))
+* **testing:** architecture contracts as test fixtures ([da53e99](https://github.com/ASRRtechnologies/core/commits/da53e9940dd8a3b2de2b57e3b207d7d8972d413e))
+
+### Bug Fixes
+
+* **ci:** pin the changelog preset and install the release plugins from npm ([5636b98](https://github.com/ASRRtechnologies/core/commits/5636b981cc89a1a3bf4e1af2103f57161501c5ed))
+
 ## [1.4.1](https://github.com/ASRRtechnologies/core/compare/v1.4.0...v1.4.1) (2026-07-20)
 
 ## [1.4.0](https://github.com/ASRRtechnologies/core/compare/v1.3.1...v1.4.0) (2026-07-15)
