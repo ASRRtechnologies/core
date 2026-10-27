@@ -171,3 +171,10 @@ tasks.withType<Test> {
     finalizedBy(tasks.jacocoTestReport)
     useJUnitPlatform()
 }
+
+// The test fixtures are published under this project's name ("lib"), but consumers ask for them as
+// testFixtures("nl.asrr:core:<v>"), i.e. the capability nl.asrr:core-test-fixtures. 1.5.0 shipped
+// without it and no app could resolve the contracts.
+listOf("testFixturesApiElements", "testFixturesRuntimeElements").forEach { name ->
+    configurations.named(name) { outgoing.capability("${project.group}:core-test-fixtures:${project.version}") }
+}
