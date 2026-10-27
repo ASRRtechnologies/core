@@ -1,0 +1,1 @@
+BadInvoiceRepository.findByNumber  # invoice numbers are unique across tenants in this sample
