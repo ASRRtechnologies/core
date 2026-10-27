@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.spring") version "2.2.21"
 
     `java-library`
+    `java-test-fixtures`
     `maven-publish`
     signing
     application
@@ -55,6 +56,9 @@ publishing {
             versionMapping {
                 usage("java-api") { fromResolutionOf("runtimeClasspath") }
                 usage("java-runtime") { fromResolutionResult() }
+                // The test-fixtures variants resolve their own classpath; without this their
+                // BOM-managed dependencies are published without a version.
+                allVariants { fromResolutionResult() }
             }
 
             pom {
@@ -113,6 +117,23 @@ dependencies {
 
     // Kotlin Logging — new coordinates as of v3+
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.14")
+
+    // Optional integrations: core compiles against them, the consuming app brings them along when it
+    // uses the matching classes (nl.asrr.core.monitoring, auth.revocation). Not in the published pom.
+    compileOnly("io.sentry:sentry:8.61.0")
+    compileOnly("io.sentry:sentry-spring-7:8.61.0")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-redis")
+    compileOnly("org.springframework.boot:spring-boot-starter-websocket")
+    testImplementation("io.sentry:sentry:8.61.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-websocket")
+
+    // Architecture contracts for consuming apps: testImplementation(testFixtures("nl.asrr:core:<version>")).
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter-api")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
+    testFixturesCompileOnly("net.javacrumbs.shedlock:shedlock-spring:7.10.1")
+    testImplementation("net.javacrumbs.shedlock:shedlock-spring:7.10.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
