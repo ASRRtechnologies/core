@@ -32,9 +32,17 @@ class MonitoringTest {
         assertEquals("t1", event.getTag("tenant"))
         assertEquals("jwt", event.getTag("auth"))
         assertEquals("u1", event.user?.id)
+        assertNull(event.user?.email)
         assertNull(event.request?.headers)
         assertNull(event.request?.queryString)
         assertEquals("/api/v1/auth/logout/[Filtered]", event.request?.url)
+    }
+
+    @Test
+    fun `the e-mail address is sent only when the app provides it`() {
+        val event = SentryEvent()
+        RequestContextEventProcessor { ReportingContext(userRecordId = "u1", userEmail = "jane@example.com") }.process(event, Hint())
+        assertEquals("jane@example.com", event.user?.email)
     }
 
     @Test

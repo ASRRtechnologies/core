@@ -10,14 +10,16 @@ import io.sentry.protocol.SentryTransaction
 import io.sentry.protocol.User
 
 /**
- * Who a report is about, read off the reporting thread. [userRecordId] is the generated record id,
- * never the username, which is an e-mail address. [auth] names how the caller signed in (`jwt`,
- * `api-key`, …).
+ * Who a report is about, read off the reporting thread. [userRecordId] is the generated record id.
+ * [userEmail] is sent along only when the app provides it: it identifies a person, so pass it only
+ * when the app's privacy terms cover sending it to Sentry. [auth] names how the caller signed in
+ * (`jwt`, `api-key`, …).
  */
 data class ReportingContext(
     val tenantId: String? = null,
     val auth: String? = null,
     val userRecordId: String? = null,
+    val userEmail: String? = null,
 )
 
 /** Reads the [ReportingContext] of the current thread, typically off the Spring `SecurityContext`. */
@@ -48,7 +50,12 @@ class RequestContextEventProcessor(
         val context = runCatching { context.current() }.getOrNull() ?: return event
         context.tenantId?.let { event.setTag(TENANT_TAG, it) }
         context.auth?.let { event.setTag(AUTH_TAG, it) }
-        context.userRecordId?.let { event.user = User().apply { id = it } }
+        context.userRecordId?.let { recordId ->
+            event.user = User().apply {
+                id = recordId
+                email = context.userEmail
+            }
+        }
         return event
     }
 
