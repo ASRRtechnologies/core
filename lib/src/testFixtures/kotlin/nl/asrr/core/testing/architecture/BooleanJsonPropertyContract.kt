@@ -2,7 +2,6 @@
 package nl.asrr.core.testing.architecture
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import nl.asrr.core.testing.architecture.ArchitectureScan.require
 import org.junit.jupiter.api.Test
 import org.springframework.asm.ClassReader
 import java.lang.reflect.Modifier
@@ -14,7 +13,9 @@ import java.lang.reflect.Modifier
  * `@field:JsonProperty("isActive")` (or `@get:`/`@param:`).
  *
  * Checks every class under [basePackage] that [isSerialized] (by default: `@Document` entities and
- * `*Dto`, `*Request`, `*Response` types).
+ * `*Dto`, `*Request`, `*Response` types). Adding the annotation to an existing property changes its
+ * wire name, so an app that already ships such properties lists them in
+ * `src/test/resources/<baselineFile>` (`Class.field  # why`); the list may only shrink.
  */
 abstract class BooleanJsonPropertyContract {
 
@@ -22,6 +23,8 @@ abstract class BooleanJsonPropertyContract {
 
     /** Also scan compiled test classes; only for testing the contract itself. */
     protected open val scanTestOutput: Boolean = false
+
+    open val baselineFile: String = "architecture/is-boolean-json-names.txt"
 
     /** Which classes go over the wire. */
     open fun isSerialized(type: Class<*>): Boolean =
@@ -51,10 +54,11 @@ abstract class BooleanJsonPropertyContract {
 
     @Test
     fun `is-prefixed booleans keep their name in JSON`() {
-        val offenders = offenders()
-        require(offenders.isEmpty()) {
-            "Kotlin `is`-booleans that Jackson serializes without the `is` (isActive -> active). Add " +
-                "@field:JsonProperty(\"<name>\"):\n  " + offenders.joinToString("\n  ")
-        }
+        ArchitectureScan.ratchet(
+            baselineFile,
+            offenders().toSet(),
+            "Kotlin `is`-booleans that Jackson serializes without the `is` (isActive -> active).",
+            "Add @field:JsonProperty(\"<name>\"), or, for a property whose wire name clients already read, add it to the baseline",
+        )
     }
 }
