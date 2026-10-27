@@ -5,9 +5,13 @@ import nl.asrr.core.auth.service.ISecurityService
 import nl.asrr.core.exceptions.NotFoundException
 import nl.asrr.core.generics.model.ITenantCrudEntity
 import nl.asrr.core.generics.repository.ITenantCrudRepository
+import nl.asrr.core.generics.search.CsvExport
+import nl.asrr.core.generics.search.DynamicSearch
 import nl.asrr.core.generics.search.FreeTextSearch
+import nl.asrr.core.generics.search.SearchRequest
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -52,6 +56,29 @@ abstract class ITenantCrudService<T : ITenantCrudEntity>(
         val content = mongoTemplate.find(query, entityClass) as List<T>
         return PageImpl(content, pageable, total)
     }
+
+    /**
+     * One page of the current tenant's records matching [request] (see [DynamicSearch] for the
+     * filter syntax). The tenant is always part of the query; [dynamicSearchScope] adds whatever
+     * else the app restricts a caller to.
+     */
+    open fun dynamicSearch(request: SearchRequest): Page<T> {
+        val entityClass = requireNotNull(resolvedEntityClass) { "Cannot resolve the entity type of ${this::class.simpleName}" }
+        val scope = (listOf(where("tenantId").`is`(securityService.getTenantId())) + dynamicSearchScope()).toTypedArray()
+        val query = DynamicSearch.query(request, *scope)
+
+        @Suppress("UNCHECKED_CAST")
+        val content = mongoTemplate.find(query, entityClass) as List<T>
+        val total = mongoTemplate.count(DynamicSearch.countQuery(request, *scope), entityClass)
+        return PageImpl(content, PageRequest.of(request.page, request.size), total)
+    }
+
+    /** All matches of [request] (up to [DynamicSearch.MAX_PAGE_SIZE]) as CSV, safe to open in a spreadsheet. */
+    open fun dynamicSearchCsv(request: SearchRequest): ByteArray =
+        CsvExport.toCsv(dynamicSearch(request.copy(page = 0, size = DynamicSearch.MAX_PAGE_SIZE)).content)
+
+    /** Extra criteria AND-ed into every [dynamicSearch], e.g. per-user visibility. */
+    protected open fun dynamicSearchScope(): List<Criteria> = emptyList()
 
     override fun findAll(): List<T> {
         return repository.findAllByTenantId(securityService.getTenantId())
