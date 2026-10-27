@@ -19,3 +19,12 @@ fun normalizeDomain(domain: String?): String? {
         .trimEnd('/')
         .ifBlank { null }
 }
+
+/**
+ * The host one label up, or null when that would leave a bare TLD.
+ * E.g. "app.dellastreet.eu" → "dellastreet.eu", "dellastreet.eu" → null
+ */
+fun parentDomain(host: String): String? {
+    val parent = host.substringAfter('.', missingDelimiterValue = "")
+    return parent.takeIf { it.contains('.') }
+}
