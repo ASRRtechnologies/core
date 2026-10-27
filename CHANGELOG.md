@@ -1,5 +1,11 @@
 # ASRR Core Kotlin Package Changelog
 
+## [1.7.0](https://github.com/ASRRtechnologies/core/compare/v1.7.0%0Dv1.6.0#diff) (2026-10-27)
+
+### Features
+
+* **id:** ids are an A and 15 random base62 characters ([f6894f0](https://github.com/ASRRtechnologies/core/commits/f6894f0cd41febf4ff4a13d74a173abb278d47fe))
+
 ## [1.6.0](https://github.com/ASRRtechnologies/core/compare/v1.6.0%0Dv1.5.0#diff) (2026-10-27)
 
 ### Features
