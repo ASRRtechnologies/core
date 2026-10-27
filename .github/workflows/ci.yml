@@ -38,7 +38,10 @@ jobs:
           node-version: "lts/*"
 
       - name: Set up semantic-release
-        run: npm install -g semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/exec semantic-release/git semantic-release/release-notes-generator conventional-changelog-conventionalcommits
+        # The preset stays on major 8: 9 needs conventional-changelog-writer 9, which the release
+        # notes generator does not ship yet, and generateNotes then fails before anything is
+        # published (1.5.0, 27 Oct 2026). The @-less names installed the plugins' GitHub master.
+        run: npm install -g semantic-release @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/exec @semantic-release/git @semantic-release/release-notes-generator conventional-changelog-conventionalcommits@8
 
       # Run Semantic Release to create releases based on commit messages
       - name: Release
